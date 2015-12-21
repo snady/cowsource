@@ -8,9 +8,12 @@ Cowsource is a food-based app that combines the utility of Yelp with the conveni
 |   **Member**         |            **Role**            |
 |----------------------|--------------------------------|
 |Dong Shin             | Leader                         |
-|Sandy Fang            | Middlware                      |
-|Katherine Gershfeld   | Backend                        |
+|Sandy Fang            | UX/JS                          |
+|Katherine Gershfeld   | Database                       |
 
 ##How to Use
 
 ## Deadlines
++ End of Break
++ HTML Templates, Pages and begin compiling mock data to test with
++ Everything
