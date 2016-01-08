@@ -14,14 +14,24 @@ c.execute(q)
 q = "create table users(id integer, name text, password text)"
 c.execute(q)
 
-q = "create table posts(id integer, info text, file text, likes integer, datething, uid integer)"
+q = "create table posts(id integer, jasondata text, file text, time timestamp default current_timestamp, uid integer)"
 c.execute(q)
 
 q = "create table comments(id integer, content text, pid integer, uid integer)"
 c.execute(q)
 
-q = "create table restaurants(id integer, name text, location text)"
-c.execute(q)
+#q = "create table restaurants(id integer, name text, location text)"
+#c.execute(q)
 
 conn.commit()
+
+'''
+jasonSS
+SSSSSSSSSSS
+restaurant
+location
+price
+likes
+tags
+'''
 
