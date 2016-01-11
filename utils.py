@@ -1,3 +1,5 @@
+import sqlite3,hashlib
+
 def encrypt(word):
     hashp = hashlib.md5()
     hashp.update(word)
@@ -51,3 +53,18 @@ def addUser(username,password,email):
     conn.commit()
     conn.close()
     return False
+
+
+def writePost(jason,path,idu):
+    conn = sqlite3.connect('data.db')
+    cur = conn.cursor()
+    q = "SELECT MAX(pid) FROM posts"
+    idp = cur.execute(q).fetchone()[0]
+    if idp == None:
+        idp = 0
+    print idp+1
+    q = "INSERT INTO posts(id,jasondata,file,uid) VALUES(?,?,?,?)"
+    cur.execute(q,(idp+1,jason,path,idu))
+    conn.commit()
+    conn.close()
+    return idp + 1
