@@ -65,7 +65,7 @@ def addUser(username,password,email):
     return False
 
 
-def writePost(jason,path,idu):
+def writePost(jason,path,idu,idy):
     conn = sqlite3.connect('data.db')
     cur = conn.cursor()
     q = "SELECT MAX(pid) FROM posts"
@@ -73,8 +73,10 @@ def writePost(jason,path,idu):
     if idp == None:
         idp = 0
     print idp+1
-    q = "INSERT INTO posts(id,jasondata,file,uid) VALUES(?,?,?,?)"
-    cur.execute(q,(idp+1,jason,path,idu))
+    q = "INSERT INTO posts(id,jasondata,file,uid,yelpid) VALUES(?,?,?,?,?)"
+    cur.execute(q,(idp+1,jason,path,idu,idy))
     conn.commit()
     conn.close()
     return idp + 1
+
+# if yelpid not in rest then add to rest
