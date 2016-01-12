@@ -11,13 +11,21 @@ Cowsource is a food-based app that combines the utility of Yelp with the conveni
 |Sandy Fang            | UX/JS                          |
 |Katherine Gershfeld   | Database                       |
 
+html stuff
+main
+login
+profile
+restaurant pg
+post
+
 ##How to Use
 
 ## Deadlines
-+ End of Break
-+ HTML Templates, Pages and begin compiling mock data to test with
-+ Everything
-
++ 1/11 Login on all ends, Yelp API stuff name-id-display address
++ 1/12 Make post, Display post, dynamic dropdown 
++ 1/13 Basic functioning app
++ 1/14 User pages, Restaurant pages, Comments
++ 1/15 
 ##Database design
 + Users: ID Name Password
 + Comments: ID text userid postid
