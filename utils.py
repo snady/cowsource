@@ -33,6 +33,16 @@ def getUserName(uid):
     result = cur.execute(q%uid).fetchone()
     conn.close()
     return result[0]
+    
+def getAllUsers():
+    conn = sqlite3.connect('data.db')
+    cur = conn.cursor()
+    q = "SELECT users.name FROM users"
+    cur.execute(q)
+    all_rows = cur.fetchall()
+    print all_rows
+    conn.commit()
+    return all_rows
 
 def addUser(username,password,email):
     conn = sqlite3.connect('data.db')
