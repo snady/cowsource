@@ -1,17 +1,45 @@
 <html>
 <head>
-<title>Spaghetti</title>
+  <title>Spaghetti</title>
 </head>
 <body>
-    <h2><font color="red">{{error}}</font></h2>
-<h2>Log In<br /><br />
+  <table width=50%><tr>
+    <td>
+      <h2><font color="red">{{error}}</font></h2>
+    </td>
+    <td>
+    </td></tr>
+  <tr>
+    <td>
+      <h2>Log In<br />
+    </td>
+    <td>
+      <h2>Register<br />
+    </td></tr>
+    <tr><td>
       <form method = "POST">
-        Username:<input type = "text" name = "user">
-<br /><br />
-    Password:<input type = "password" name = "pass"></h2>
-Spaghetti<br /><br />
-    <input type = "submit" name = "press" value = "login"> or
-    <input type = "submit" name = "press" value = "register"> </form>
-</h2>
+        Username: <input type = "text" name = "user">
+        <br /><br />
+        Password: <input type = "password" name = "pass"></h2>
+        <br /><br />
+    </td>
+    <td>
+      <form method = "POST">
+        Username: <input type = "text" name = "user">
+      <br /><br />
+        Password: <input type = "password" name = "pass"></h2>
+      <br /><br />
+        Email: <input type= "text" name = "email">
+      <br /><br />
+    </td></tr>
+    <tr><td>
+      <input type = "submit" name = "press" value = "login">
+      </form>
+    </td>
+    <td>
+      <input type = "submit" name = "press" value = "register">
+      </form>
+    </td>
+  </table>
 </body>
 </html>

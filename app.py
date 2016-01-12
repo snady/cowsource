@@ -5,7 +5,7 @@ import utils
 
 app = Flask(__name__)
 
-@app.route("/")
+@app.route("/", methods = ['GET','POST'])
 @app.route("/login", methods = ['GET','POST'])
 def login():
         all_rows = utils.getAllUsers()
@@ -29,13 +29,17 @@ def login():
                         else: 
                                 utils.addUser(user,password,"test@gmail.com")
                                 session['user'] = user
-                                return redirect("/login")
+                                return redirect("/home")
         return render_template("login.html") #login failed
 
 @app.route("/logout")
 def logout():
         del session['user']
         return redirect("/login")
+
+@app.route("/home")
+def home():
+        return render_template("home.html")
 
 if __name__ == "__main__":
         app.secret_key = "hello"
