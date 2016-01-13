@@ -68,15 +68,22 @@ def addUser(username,password,email):
 def writePost(jason,path,idu,idy):
     conn = sqlite3.connect('data.db')
     cur = conn.cursor()
-    q = "SELECT MAX(pid) FROM posts"
+    q = "SELECT MAX(id) FROM posts"
     idp = cur.execute(q).fetchone()[0]
     if idp == None:
         idp = 0
     print idp+1
     q = "INSERT INTO posts(id,jasondata,file,uid,yelpid) VALUES(?,?,?,?,?)"
     cur.execute(q,(idp+1,jason,path,idu,idy))
+    q = "SELECT * FROM restaurants WHERE yelpid = '%s'"
+    rests = cur.execute(q%idy).fetchall()
+    print rests
+    if len(rests)==0:
+        q = "INSERT INTO restaurants VALUES (?,?,?,?,?)"
+        cur.execute(q,(idy,"a","b","c","d"))
     conn.commit()
     conn.close()
     return idp + 1
 
 # if yelpid not in rest then add to rest
+#writePost("hi","path",55,"testid")
