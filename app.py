@@ -12,25 +12,31 @@ def login():
         for n in range(len(all_rows)):
                 all_rows[n] = all_rows[n][0]
         if request.method == 'POST':
-                user = str(request.form['user'])
-                password = str(request.form['pass'])
+                #user = str(request.form['user'])
+                #password = str(request.form['pass'])
                 error = ""
                 message = ""
                 if request.form['login'] == "login":
                         if utils.authenticate(user,password):
                                 session['user'] = user
-                                return redirect("/home")
+                                message = "You are now logged in!"
+                                return render_template("home.html",message=message)
                         else:
                                 error = "Incorrect Username or Password. Try Again."
                                 return render_template("login.html",error=error)
-                else:
+                                
+                if request.form['register'] == "register":
+                        '''
                         if user in all_rows:
                                 error = "Username already exists. Please try another"
                                 return render_template("login.html",error=error)
-                        else: 
-                                utils.addUser(user,password,"test@gmail.com")
+                        else:
+                                message = "Account Created!"
+                                utils.addUser(user,password,email)
                                 session['user'] = user
-                                return redirect("/home")
+                                return redirect("/home",message=message)
+                        '''
+                        pasta = "pasta"
         return render_template("login.html") #login failed
 
 @app.route("/logout")
