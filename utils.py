@@ -1,4 +1,4 @@
-import sqlite3,hashlib
+import sqlite3,hashlib,authy
 
 def encrypt(word):
     hashp = hashlib.md5()
@@ -80,3 +80,18 @@ def writePost(jason,path,idu,idy):
     return idp + 1
 
 # if yelpid not in rest then add to rest
+
+def getRestaurant(name, location):
+    dic = authy.search(name,location)
+    print dic
+    cleaned = []
+    for i in dic['businesses']:
+        a={}
+        a['id']=i['id']
+        a['name']=i['name']
+        a['phone']=i['phone'][0]
+        a['address']=[i['location']['address'],i['location']['city'],i['location']['state_code'],i['location']['postal_code']]
+        a['rating']=i['rating']
+        cleaned.append(a)
+
+    return cleaned
