@@ -101,3 +101,5 @@ def getRestaurant(name, location):
         cleaned.append(a)
 
     return cleaned
+    #address format = [street address, city, state, zip code]
+
