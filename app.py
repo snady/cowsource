@@ -32,6 +32,26 @@ def login():
                                 return redirect("/home")
         return render_template("login.html") #login failed
 
+@app.route("/getrest")
+def getRestaurant():
+    name = request.args.get('name')
+    location = request.args.get('location')
+    dic = authy.search(name,location)
+    print dic
+    cleaned = []
+    for i in dic['businesses']:
+        a={}
+        a['id']=i['id']
+        a['name']=i['name']
+        a['phone']=i['phone'][0]
+        a['address']=[i['location']['address'],i['location']['city'],i['location']['state_code'],i['location']['postal_code']]
+        a['rating']=i['rating']
+        cleaned.append(a)
+    clean = {}
+    clean['results'] = cleaned
+    return jsonify(result=clean)
+    #address format = [street address, city, state, zip code]
+
 @app.route("/logout")
 def logout():
         del session['user']

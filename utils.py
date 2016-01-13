@@ -87,19 +87,19 @@ def writePost(jason,path,idu,idy):
 
 # if yelpid not in rest then add to rest
 
-def getRestaurant(name, location):
-    dic = authy.search(name,location)
-    print dic
-    cleaned = []
-    for i in dic['businesses']:
-        a={}
-        a['id']=i['id']
-        a['name']=i['name']
-        a['phone']=i['phone'][0]
-        a['address']=[i['location']['address'],i['location']['city'],i['location']['state_code'],i['location']['postal_code']]
-        a['rating']=i['rating']
-        cleaned.append(a)
-
-    return cleaned
-    #address format = [street address, city, state, zip code]
-
+def addRestaurant(cleany, yelpid):
+    # cleany is dictionary
+    result = None
+    conn = sqlite3.connect('data.db')
+    cur = conn.cursor()
+    q = "SELECT restaurants.yelpid FROM restaurants WHERE restaurants.yelpid = ?"
+    result = cur.execute(q,(yelpid,)).fetchone()
+    if result == None:
+        return
+    q = "INSERT INTO restaurants VALUES (?, ?, ?, ?, ?)"
+    for i in cleany:
+        if cleany['id'] == yelpid:
+            cur.execute(q,(i['id'],i['name'],'\n'.join(i['address']),i['rating'],i['phone']))
+    conn.commit()
+    conn.close()
+    
