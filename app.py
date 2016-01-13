@@ -15,7 +15,8 @@ def login():
                 user = str(request.form['user'])
                 password = str(request.form['pass'])
                 error = ""
-                if request.form['press'] == "login":
+                message = ""
+                if request.form['login'] == "login":
                         if utils.authenticate(user,password):
                                 session['user'] = user
                                 return redirect("/home")
