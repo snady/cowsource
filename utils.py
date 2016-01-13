@@ -1,4 +1,4 @@
-import sqlite3,hashlib
+import sqlite3,hashlib,authy
 
 def encrypt(word):
     hashp = hashlib.md5()
@@ -68,15 +68,38 @@ def addUser(username,password,email):
 def writePost(jason,path,idu,idy):
     conn = sqlite3.connect('data.db')
     cur = conn.cursor()
-    q = "SELECT MAX(pid) FROM posts"
+    q = "SELECT MAX(id) FROM posts"
     idp = cur.execute(q).fetchone()[0]
     if idp == None:
         idp = 0
     print idp+1
     q = "INSERT INTO posts(id,jasondata,file,uid,yelpid) VALUES(?,?,?,?,?)"
     cur.execute(q,(idp+1,jason,path,idu,idy))
+    q = "SELECT * FROM restaurants WHERE yelpid = '%s'"
+    rests = cur.execute(q%idy).fetchall()
+    print rests
+    if len(rests)==0:
+        q = "INSERT INTO restaurants VALUES (?,?,?,?,?)"
+        cur.execute(q,(idy,"a","b","c","d"))
     conn.commit()
     conn.close()
     return idp + 1
 
 # if yelpid not in rest then add to rest
+
+def addRestaurant(cleany, yelpid):
+    # cleany is dictionary
+    result = None
+    conn = sqlite3.connect('data.db')
+    cur = conn.cursor()
+    q = "SELECT restaurants.yelpid FROM restaurants WHERE restaurants.yelpid = ?"
+    result = cur.execute(q,(yelpid,)).fetchone()
+    if result == None:
+        return
+    q = "INSERT INTO restaurants VALUES (?, ?, ?, ?, ?)"
+    for i in cleany:
+        if cleany['id'] == yelpid:
+            cur.execute(q,(i['id'],i['name'],'\n'.join(i['address']),i['rating'],i['phone']))
+    conn.commit()
+    conn.close()
+    
