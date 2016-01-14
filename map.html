@@ -1,0 +1,46 @@
+<html>
+<body>
+Hello World
+<p><button onclick="geoFindMe()">Show my location</button></p>
+<div id="map"></div>
+<script>
+function geoFindMe() {
+  var output = document.getElementById("out");
+
+  if (!navigator.geolocation){
+    console.log("Geolocation is not supported by your browser");
+    return;
+  }
+
+  function success(position) {
+    var latitude  = position.coords.latitude;
+    var longitude = position.coords.longitude;
+
+    console.log('Latitude is ' + latitude + ' <br>Longitude is ' + longitude);
+    //setMarkers(map);
+  };
+
+  function error() {
+    console.log("Unable to retrieve your location");
+  };
+
+  console.log("Locating...");
+
+  navigator.geolocation.getCurrentPosition(success, error);
+
+}
+</script>
+<script>
+  var map;
+  function initMap() {
+    map = new google.maps.Map(document.getElementById('map'), {
+      center: {lat: -34.397, lng: 150.644},
+      zoom: 8
+    });
+  }
+</script>
+<script async defer
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA9850-DtC0qpwGDm2hOdMzUfDYU3RkxpI&callback=initMap">
+</script>
+</body>
+</html>
