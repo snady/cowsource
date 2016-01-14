@@ -12,12 +12,11 @@ def login():
         for n in range(len(all_rows)):
                 all_rows[n] = all_rows[n][0]
         if request.method == 'POST':
-                user = str(request.form['user'])
-                password = str(request.form['pass'])
                 error = ""
                 message = ""
-                print(request.form)
-                if request.form['login'] == "login":
+                if request.form.has_key('login'):
+                        user = str(request.form['user'])
+                        password = str(request.form['pass'])
                         if utils.authenticate(user,password):
                                 session['user'] = user
                                 message = "You are now logged in!"
@@ -25,7 +24,10 @@ def login():
                         else:
                                 error = "Incorrect Username or Password. Try Again."
                                 return render_template("login.html",error=error)                
-                if request.form['register'] == "register":
+                if request.form.has_key('register'):
+                        user = str(request.form['reguser'])
+                        password = str(request.form['regpass'])
+                        email = str(request.form['email'])
                         if user in all_rows:
                                 error = "Username already exists. Please try another"
                                 return render_template("login.html",error=error)
@@ -33,7 +35,7 @@ def login():
                                 message = "Account Created!"
                                 utils.addUser(user,password,email)
                                 session['user'] = user
-                                return redirect("/home",message=message)
+                                return render_template("home.html",message=message)
         return render_template("login.html") #login failed
 
 @app.route("/getrest")
