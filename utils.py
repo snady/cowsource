@@ -85,6 +85,15 @@ def writePost(jason,path,idu,idy):
     conn.close()
     return idp + 1
 
+def getPost(idp):
+    conn = sqlite3.connect('data.db')
+    cur = conn.cursor()
+    q = "SELECT * FROM posts WHERE posts.id = ?"
+    result = cur.execute(q,(idp,)).fetchone()
+    conn.commit()
+    conn.close()
+    return result
+
 # if yelpid not in rest then add to rest
 
 def addRestaurant(cleany, yelpid):
@@ -102,4 +111,6 @@ def addRestaurant(cleany, yelpid):
             cur.execute(q,(i['id'],i['name'],'\n'.join(i['address']),i['rating'],i['phone']))
     conn.commit()
     conn.close()
+
+print getPost(1)
     
