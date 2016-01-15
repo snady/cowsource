@@ -29,7 +29,7 @@ conn.commit()
 
 '''
 jasonSS
-SSSSSSSSSSS
+name
 description
 price
 likes
