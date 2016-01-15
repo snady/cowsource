@@ -1,5 +1,6 @@
 from flask import Flask, render_template, session, request
 from flask import redirect, url_for
+import json
 import sqlite3
 import utils
 
@@ -71,7 +72,8 @@ def makepost():
                 user = session['user']
                 idu = utils.getUserId(user)
                 jason = {'name':name,'desc':desc,'price':price,'likes':0}
-                utils.writePost(jason,img,idu,rest)
+                print(json.dumps(jason))
+                utils.writePost("rasta my pasta",img,idu,rest)
                 message = "Post created!"
                 return render_template("home.html",message=message)
         else:
