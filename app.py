@@ -1,5 +1,6 @@
 from flask import Flask, render_template, session, request
 from flask import redirect, url_for
+import json
 import sqlite3
 import utils
 import json
@@ -36,7 +37,7 @@ def login():
                                 message = "Account Created!"
                                 utils.addUser(user,password,email)
                                 session['user'] = user
-                                return render_template("home.html",message=message)
+                                return render_template("home.html",message=messa)
         return render_template("login.html") #login failed
 
 @app.route("/getrest")
@@ -58,6 +59,26 @@ def getRestaurant():
     clean['results'] = cleaned
     return jsonify(result=clean)
     #address format = [street address, city, state, zip code]
+
+@app.route("/makepost", methods = ['GET','POST'])
+def makepost():
+        if 'user' not in session:
+                return redirect ("/login")
+        if request.method == 'POST':
+                name = request.form['name']
+                desc = request.form['description']
+                img = request.form['imgurl']
+                rest = request.form['rest'] #need to replace with a yelp func that gets the yelp id instead of restaurant name
+                price = request.form['price']
+                user = session['user']
+                idu = utils.getUserId(user)
+                jason = {'name':name,'desc':desc,'price':price,'likes':0}
+                print(json.dumps(jason))
+                utils.writePost("rasta my pasta",img,idu,rest)
+                message = "Post created!"
+                return render_template("home.html",message=message)
+        else:
+                return render_template("makepost.html")
 
 @app.route("/logout")
 def logout():
