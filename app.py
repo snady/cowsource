@@ -2,6 +2,7 @@ from flask import Flask, render_template, session, request
 from flask import redirect, url_for
 import sqlite3
 import utils
+import json
 
 app = Flask(__name__)
 
@@ -66,6 +67,30 @@ def logout():
 @app.route("/home")
 def home():
         return render_template("home.html")
+
+def searchByTag(lis): #lis is array of tags
+        dic = {}
+        posts = utils.getAllPost()
+        for post in posts:
+                jason = json.loads(post[1]) #post[1] is jasondata text in sql
+                for tag in lis:
+                        if tag in jason['tags']:
+                                dic[post[0]] += 1
+        return sorted(dic, key=dic.get, reverse=True) #sorted list of post id's that has at least one of the search tags
+
+def searchByRestaurant(query):
+        queries = query.lower().split(" ")
+        restaurants = utils.getAllRestaurants()
+        results = {}
+        for restaurants in restaurants:
+                words = restaurant[1].lower()
+                for queri in queries:
+                        if words.find(queri) != -1:
+                                if restaurant[0] not in results:
+                                        results[restaurant[0]] = 0
+                                results[restaurant[0]] += 1
+        return sorted(results, key=results.get, reverse=True) # sorted list of yelp id's by number of matching query
+        
 
 if __name__ == "__main__":
         app.secret_key = "hello"
