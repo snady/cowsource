@@ -1,0 +1,102 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Spaghetti</title>
+
+    <link href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css" rel="stylesheet" >
+    <link href="{{url_for('static', filename='pure.css')}}" rel="stylesheet" >
+</head>
+
+<body>
+	<div class="banner">
+    	<h1 class="banner-head">
+        cowsource
+    	</h1>
+	</div>
+	<div class="pure-g">
+		<div class="pure-u-1-2">
+			<p class="error">{{error}}</p>
+		</div>
+		<div class="pure-u-1-2">
+			<p class="error">{{regerror}}</p>
+		</div>
+	</div>
+	<div class="pure-g">
+	<div class="pure-u-1-2">
+
+	<form class="pure-form pure-form-aligned" method = "POST">
+    <fieldset>
+    	<div class="pure-control-group">
+    		<label for="login"><h2>Login</h2></label>
+    	</div>
+        <div class="pure-control-group">
+            <label for="name">Username</label>
+            <input name="user" type="text" placeholder="Username">
+        </div>
+
+        <div class="pure-control-group">
+            <label for="password">Password</label>
+            <input name="pass" type="password" placeholder="Password">
+        </div>
+        <!--
+        <div class="pure-control-group">
+            <label for="email">Email Address</label>
+            <input id="email" type="email" placeholder="Email Address">
+        </div>
+
+        <div class="pure-control-group">
+            <label for="foo">Supercalifragilistic Label</label>
+            <input id="foo" type="text" placeholder="Enter something here...">
+        </div>
+		!-->
+        <div class="pure-controls">
+        	<!--
+            <label for="cb" class="pure-checkbox">
+                <input id="cb" type="checkbox"> I've read the terms and conditions
+            </label>
+			!-->
+            <button name="login" value="login" type="submit" class="pure-button pure-button-primary">Submit</button>
+        </div>
+        
+    </fieldset>
+	</form>
+
+	</div>
+	<div class="pure-u-1-2">
+		<form class="pure-form pure-form-aligned" method = "POST">
+    	<fieldset>
+    	<div class="pure-control-group">
+    		<label for="register"><h2>Register</h2></label>
+    	</div>
+        <div class="pure-control-group">
+            <label for="name">Username</label>
+            <input name="reguser" type="text" placeholder="Username">
+        </div>
+
+        <div class="pure-control-group">
+            <label for="password">Password</label>
+            <input name="regpass" type="password" placeholder="Password">
+        </div>
+        
+        <div class="pure-control-group">
+            <label for="email">Email Address</label>
+            <input name="email" type="email" placeholder="Email Address">
+        </div>
+        <!--
+        <div class="pure-control-group">
+            <label for="foo">Supercalifragilistic Label</label>
+            <input id="foo" type="text" placeholder="Enter something here...">
+        </div>
+		!-->
+        <div class="pure-controls">
+            <button name="register" value="register" type="submit" class="pure-button pure-button-primary">Submit</button>
+        </div>
+        
+    </fieldset>
+	</form>
+	</div>
+</body>
+</html>
