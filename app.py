@@ -12,7 +12,7 @@ app = Flask(__name__)
 def login():
         all_rows = mongoutils.getAllUsers()
         for n in range(len(all_rows)):
-                all_rows[n] = all_rows[n][0]
+                all_rows[n] = all_rows[n]['name']
         if request.method == 'POST':
                 error = ""
                 message = ""
