@@ -108,7 +108,7 @@ def writePost(path, tags, name, price, description, idu, idy):
         idp = 1
     else:
         idp = ps[-1]['_id']+1    
-    r = {'_id':idp, 'tags':tags, 'likes':0, 'name':name, 'price':price, 'description':description, 'file':path, 'uid':idu, 'yelpid':idy}
+    r = {'_id':idp, 'tags':tags, 'likes':[], 'name':name, 'price':price, 'description':description, 'file':path, 'uid':idu, 'yelpid':idy}
     postsc.insert(r)
     if restsc.find_one({'_id':idy}) == None:
         #addRestaurant(idy)
@@ -123,4 +123,13 @@ Returns:
 
 def addRestaurant():
 '''
+
+def search(tag):
+    tags = tag.split(',')
+    result = []
+    for t in tags:
+        r = list(postsc.find({'tags':t}))
+        result.extend()
+    return result
+    
 ##########Comments
