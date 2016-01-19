@@ -5,6 +5,7 @@ connection = MongoClient()
 db = connection['database']
 usersc = db.users
 postsc = db.posts
+restsc = db.rests
 
 #########Users
 
@@ -36,7 +37,7 @@ Args:
 Returns:
 '''
 def getUserId(username):
-    result = usersc.findOne({'name':username},{'_id':1})
+    result = usersc.find_one({'name':username},{'_id':1})
     return result
 
 '''
@@ -45,7 +46,7 @@ Args:
 Returns:
 '''
 def getUserName(uid):
-    result = usersc.findOne({'_id':uid},{'name':1})
+    result = usersc.find_one({'_id':uid},{'name':1})
     return result
 
 '''
@@ -55,7 +56,6 @@ Returns:
 ''' 
 def getAllUsers():
     return list(usersc.find())
-#.sort({'_id':1}))
 
 '''
 Args:
@@ -76,18 +76,51 @@ def addUser(username,password,email):
         return True
     return False
                 
-addUser('hellopy','my','friend')
+#addUser('hellopyk','my','friend')
 ##########Posts
+
 '''
-def writePost():
-
+Args:
+    
+Returns:
+''' 
 def getPost(idp):
+    result = postsc.find_one({'_id':uid})
+    return result
 
+'''
+Args:
+    
+Returns:
+''' 
 def getAllPosts():
+    return list(postsc.find())
+    
+'''
+Args:
+    
+Returns:
+''' 
+def writePost(path, tags, name, price, description, idu, idy):
+    ps = getAllPosts()
+    print ps
+    if len(ps)==0:
+        idp = 1
+    else:
+        idp = ps[-1]['_id']+1    
+    r = {'_id':idp, 'tags':tags, 'likes':0, 'name':name, 'price':price, 'description':description, 'file':path, 'uid':idu, 'yelpid':idy}
+    postsc.insert(r)
+    if restsc.find_one({'_id':idy}) == None:
+        #addRestaurant(idy)
+        print "need restaurant"
+
+#writePost("/path/",["hello","i","am","a","tag"],"nameoffood",3.14,"this is a nice pie", 2, "coolest-restaurant")
+
+'''
+Args:
+    
+Returns:
 
 def addRestaurant():
-
-##########Comments
-
-
 '''
+##########Comments
