@@ -1,8 +1,8 @@
 from flask import Flask, render_template, session, request
 from flask import redirect, url_for
-import json
-import sqlite3
+from pymongo import MongoClient
 import utils
+import mongoutils
 import json
 
 app = Flask(__name__)
@@ -10,7 +10,7 @@ app = Flask(__name__)
 @app.route("/", methods = ['GET','POST'])
 @app.route("/login", methods = ['GET','POST'])
 def login():
-        all_rows = utils.getAllUsers()
+        all_rows = mongoutils.getAllUsers()
         for n in range(len(all_rows)):
                 all_rows[n] = all_rows[n][0]
         if request.method == 'POST':
@@ -20,7 +20,7 @@ def login():
                 if request.form.has_key('login'):
                         user = str(request.form['user'])
                         password = str(request.form['pass'])
-                        if utils.authenticate(user,password):
+                        if mongoutils.authenticate(user,password):
                                 session['user'] = user
                                 message = "You are now logged in!"
                                 return render_template("home.html",message=message)
@@ -36,7 +36,7 @@ def login():
                                 return render_template("index.html",regerror=error)
                         else:
                                 message = "Account Created!"
-                                utils.addUser(user,password,email)
+                                mongoutils.addUser(user,password,email)
                                 session['user'] = user
                                 return render_template("home.html",message=message)
         return render_template("index.html") #login failed
@@ -72,10 +72,10 @@ def makepost():
                 rest = request.form['rest'] #need to replace with a yelp func that gets the yelp id instead of restaurant name
                 price = request.form['price']
                 user = session['user']
-                idu = utils.getUserId(user)
+                idu = mongoutils.getUserId(user)
                 jason = {'name':name,'desc':desc,'price':price,'likes':0}
                 print(json.dumps(jason))
-                utils.writePost("rasta my pasta",img,idu,rest)
+                mongoutils.writePost("rasta my pasta",img,idu,rest)
                 message = "Post created!"
                 return render_template("home.html",message=message)
         else:
