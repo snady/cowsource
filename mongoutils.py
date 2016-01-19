@@ -54,7 +54,8 @@ Args:
 Returns:
 ''' 
 def getAllUsers():
-    return list(usersc.find().sort({'_id':1})
+    return list(usersc.find())
+#.sort({'_id':1}))
 
 '''
 Args:
@@ -62,20 +63,22 @@ Args:
 Returns:
 '''
 def addUser(username,password,email):
-    if usersc.findOne({'name':username}) == None:
+    if usersc.find_one({'name':username}) == None:
         us = getAllUsers()
+        print us
         if len(us)==0:
             idu = 1
         else:
             idu = us[-1]['_id']+1    
+        password = encrypt(password)
         r = {'_id':idu, 'name':username, 'password':password, 'email':email}
         usersc.insert(r)
         return True
     return False
-
-
+                
+addUser('hellopy','my','friend')
 ##########Posts
-
+'''
 def writePost():
 
 def getPost(idp):
@@ -87,3 +90,4 @@ def addRestaurant():
 ##########Comments
 
 
+'''
