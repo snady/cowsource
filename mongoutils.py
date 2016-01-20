@@ -95,7 +95,21 @@ Returns:
 ''' 
 def getAllPosts():
     return list(postsc.find())
-    
+
+def getUserPosts(idu):
+    return list(postsc.find({'uid':idu}))
+
+def likePost(idu,idp):
+    p = postsc.find_one({'_id:':idp})
+    if not liked(idu,idp):
+        p['likes'].append(idu)
+    else:
+        p['likes'].remove(idu)
+
+def liked(idu,idp):
+    p = postsc.find_one({'_id:':idp})
+    return idu in p['likes']
+
 '''
 Args:
     
@@ -134,12 +148,24 @@ def getRestaurant(yelpid):
 def getAllRestaurants():
     return list(restsc.find())
 
-def search(tag):
+def searchTag(tag):
     tags = tag.split(',')
-    result = []
+    result = {}
     for t in tags:
-        r = list(postsc.find({'tags':t}))
+        r = list(postsc.find({'tags':{'$in':[t]}}))
         result.extend()
     return result
-    
+
+def searchRestaurant(query):
+    queries = query.lower().split(' ')
+    rests = getAllRestaurants()
+    results = {}
+    for rest in rests:
+        words = rest['name'].lower()
+        for q in queries:
+            if words.find(q) != -1:
+                if rest['_id'] not in results:
+                    results[rest['_id']] += 1
+    return sorted(results, key=results.get, reverse=True)
+
 ##########Comments
