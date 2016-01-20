@@ -4,6 +4,7 @@ from pymongo import MongoClient
 import utils
 import mongoutils
 import json
+import authy
 
 app = Flask(__name__)
 
@@ -42,9 +43,9 @@ def login():
         return render_template("index.html") #login failed
 
 @app.route("/getrest")
-def getRestaurant():
-    name = request.args.get('name')
-    location = request.args.get('location')
+def getRestaurant(name,location):
+    #name = request.args.get('name')
+    #location = request.args.get('location')
     dic = authy.search(name,location)
     print dic
     cleaned = []
@@ -56,9 +57,7 @@ def getRestaurant():
         a['address']=[i['location']['address'],i['location']['city'],i['location']['state_code'],i['location']['postal_code']]
         a['rating']=i['rating']
         cleaned.append(a)
-    clean = {}
-    clean['results'] = cleaned
-    return jsonify(result=clean)
+    return cleaned
     #address format = [street address, city, state, zip code]
 
 @app.route('/like')
@@ -129,4 +128,6 @@ def home():
 if __name__ == "__main__":
         app.secret_key = "hello"
         app.debug = True
+        print getRestaurant('salad','new york, ny')[0]
         app.run(host='0.0.0.0', port=8000)
+print getRestaurant('salad','new york, ny')
