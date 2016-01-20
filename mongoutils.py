@@ -85,7 +85,7 @@ Args:
 Returns:
 ''' 
 def getPost(idp):
-    result = postsc.find_one({'_id':uid})
+    result = postsc.find_one({'_id':idp})
     return result
 
 '''
