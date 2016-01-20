@@ -1,0 +1,18 @@
+<html>
+  <head>
+  </head>
+  <body>
+    <span>username: {{username}}</span>
+    {% for posty in userposts %}
+    <span>id: {{posty['_id']}}</span>
+    <span>tags: {{posty['tags']}}</span>
+    <span>likes: {{posty['likes']}}</span>
+    <span>name: {{posty['name']}}</span>
+    <span>price: {{posty['price']}}</span>
+    <span>desc: {{posty['description']}}</span>
+    <span>file: {{posty['file']}}</span>
+    <span>uid: {{posty['uid']}}</span>
+    <span>yelpid: {{posty['yelpid']}}</span>
+    {% endfor %}
+  </body>
+  </html>
