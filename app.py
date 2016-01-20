@@ -13,6 +13,7 @@ def login():
         all_rows = mongoutils.getAllUsers()
         for n in range(len(all_rows)):
                 all_rows[n] = all_rows[n]['name']
+        print all_rows
         if request.method == 'POST':
                 error = ""
                 message = ""
@@ -85,7 +86,7 @@ def makepost():
                 message = "Post created!"
                 return render_template("home.html",message=message)
         else:
-                return render_template("makepost.html")
+                return render_template("writepost.html")
 
 @app.route("/post/<int:idp>")
 def showpost(idp):
