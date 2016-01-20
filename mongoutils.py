@@ -123,6 +123,16 @@ Returns:
 
 def addRestaurant():
 '''
+def addRestaurant(cleany, yelpid):
+    for i in cleany:
+        if i['id'] == yelpid:
+            restsc.update({'_id':i['id']},{'name':i['name'], 'phone':i['phone'], 'address':i['address'], 'rating':i['rating']},{upsert:true})
+
+def getRestaurant(yelpid):
+    return restsc.findone({'_id':yelpid})
+
+def getAllRestaurants():
+    return list(restsc.find())
 
 def search(tag):
     tags = tag.split(',')
