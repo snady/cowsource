@@ -43,19 +43,17 @@ def login():
         return render_template("index.html") #login failed
 
 @app.route("/getrest")
-def getRestaurant(name,location):
-    #name = request.args.get('name')
-    #location = request.args.get('location')
-    dic = authy.search(name,location)
+def getRestaurant(limit=5):
+    name = request.args.get('name')
+    location = request.args.get('location')
+    dic = authy.search(name,location,limit)
     print dic
     cleaned = []
     for i in dic['businesses']:
         a={}
         a['id']=i['id']
         a['name']=i['name']
-        a['phone']=i['phone'][0]
-        a['address']=[i['location']['address'],i['location']['city'],i['location']['state_code'],i['location']['postal_code']]
-        a['rating']=i['rating']
+        a['address']=[i['location']['address'][0],i['location']['city'],i['location']['state_code'],i['location']['postal_code']]
         cleaned.append(a)
     return cleaned
     #address format = [street address, city, state, zip code]
@@ -128,6 +126,4 @@ def home():
 if __name__ == "__main__":
         app.secret_key = "hello"
         app.debug = True
-        print getRestaurant('salad','new york, ny')[0]
         app.run(host='0.0.0.0', port=8000)
-print getRestaurant('salad','new york, ny')

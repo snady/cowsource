@@ -86,7 +86,7 @@ def request(host, path, url_params=None):
     return response
 
 
-def search(term, location):
+def search(term, location, sear=None):
     """Query the Search API by a search term and location.
 
     Args:
@@ -96,11 +96,14 @@ def search(term, location):
     Returns:
         dict: The JSON response from the request.
     """
-
+    SEARCH_LIMIT2 = SEARCH_LIMIT
+    if(sear != None):
+        SEARCH_LIMIT2 = str(sear)
+    
     url_params = {
         'term': term.replace(' ', '+'),
         'location': location.replace(' ', '+'),
-        'limit': SEARCH_LIMIT
+        'limit': SEARCH_LIMIT2
     }
     return request(API_HOST, SEARCH_PATH, url_params=url_params)
 
