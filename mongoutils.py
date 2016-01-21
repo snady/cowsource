@@ -38,7 +38,7 @@ Returns:
 '''
 def getUserId(username):
     result = usersc.find_one({'name':username},{'_id':1})
-    return result
+    return result['_id']
 
 '''
 Args:

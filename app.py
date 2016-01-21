@@ -70,17 +70,18 @@ def makepost():
         if 'user' not in session:
                 return redirect ("/login")
         if request.method == 'POST':
+                print request.form
                 name = request.form['name']
                 desc = request.form['description']
-                img = request.form['imgurl']
+                img = request.form['path']
                 rest = request.form['rest'] #need to replace with a yelp func that gets the yelp id instead of restaurant name
                 price = request.form['price']
+                tags = request.form['tags']
                 user = session['user']
                 idu = mongoutils.getUserId(user)
-                jason = {'name':name,'desc':desc,'price':price,'likes':0}
-                print(json.dumps(jason))
-                mongoutils.writePost("rasta my pasta",img,idu,rest)
+                mongoutils.writePost(img,tags,name,price,desc,idu,rest)
                 message = "Post created!"
+                print mongoutils.getAllPosts()
                 return render_template("home.html",message=message)
         else:
                 return render_template("writepost.html")
