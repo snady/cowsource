@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>jQuery UI Autocomplete - Custom data and display</title>
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+  <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+  <script>
+  console.log({{request.script_root}})
+  var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+  console.log($SCRIPT_ROOT)
+  $(function() {
+    var rests = [
+      {
+        value: "jquery",
+        label: "jQuery",
+        desc: "the write less, do more, JavaScript library",
+      },
+      {
+        value: "jquery-ui",
+        label: "jQuery UI",
+        desc: "the official user interface library for jQuery",
+      },
+      {
+        value: "sizzlejs",
+        label: "Sizzle JS",
+        desc: "a pure-JavaScript CSS selector engine",
+      }
+    ];
+ 
+    $( "#restaurant" ).autocomplete({
+      minLength: 0,
+      //source: rests,
+      source: $SCRIPT_ROOT + "/autocomplete",
+      focus: function( event, ui ) {
+        $( "#restaurant" ).val( ui.item.label );
+        return false;
+      },
+      select: function( event, ui ) {
+        $( "#restaurant" ).val( ui.item.label );
+        $( "#restaurant-id" ).val( ui.item.id );
+        return false;
+      }
+    })
+    .autocomplete( "instance" )._renderItem = function( ul, item ) {
+      return $( "<li>" )
+        .append( "<a>" + item.label + "<br>" + item.address + "</a>" )
+        .appendTo( ul );
+    };
+  });
+  </script>
+</head>
+<body>
+ 
+<div id="restaurant-label"></div>
+<input id="restaurant">
+<input type="hidden" id="restaurant-id">
+ 
+</body>
+</html>

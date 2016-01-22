@@ -124,6 +124,25 @@ def logout():
 def home():
         return render_template("home.html")
 
+@app.route("/autocomplete")
+def autocomplete():
+	name = request.args.get('term')
+    	location = 'ny'
+    	dic = authy.search(name,location,7)
+    	#print dic
+    	cleaned = []
+    	for i in dic['businesses']:
+        	a={}
+        	a['id']=i['id']
+        	a['label']=i['name']
+        	a['address']=[i['location']['address'][0],i['location']['city'],i['location']['state_code'],i['location']['postal_code']]
+        	cleaned.append(a)
+	#print request.args
+	return json.dumps(cleaned)
+
+@app.route("/sriracha")
+def sriracha():
+	return render_template("otto.html")
 
 if __name__ == "__main__":
         app.secret_key = "hello"
