@@ -148,13 +148,24 @@ def getRestaurant(yelpid):
 def getAllRestaurants():
     return list(restsc.find())
 
-def searchTag(tag):
-    tags = tag.split(',')
+def search(query):
+    query = query.strip()
     result = {}
-    for t in tags:
-        r = list(postsc.find({'tags':{'$in':[t]}}))
-        result.extend()
-    return result
+    r = list(postsc.find({'tags':{'$in':[query]}}))
+    if len(r)>0:
+        result.extend(r)
+        return result
+    #name
+    r = list(postsc.find({'name':{'$in':[query]}}))
+    if len(r)>0:
+        result.extend(r)
+        return result
+    #retaurant name
+    r = list(postsc.find({'tags':{'$in':[query]}}))
+    if len(r)>0:
+        result.extend(r)
+        return result
+    #location
 
 def searchRestaurant(query):
     queries = query.lower().split(' ')
