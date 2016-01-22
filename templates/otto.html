@@ -11,24 +11,7 @@
   var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
   console.log($SCRIPT_ROOT)
   $(function() {
-    var rests = [
-      {
-        value: "jquery",
-        label: "jQuery",
-        desc: "the write less, do more, JavaScript library",
-      },
-      {
-        value: "jquery-ui",
-        label: "jQuery UI",
-        desc: "the official user interface library for jQuery",
-      },
-      {
-        value: "sizzlejs",
-        label: "Sizzle JS",
-        desc: "a pure-JavaScript CSS selector engine",
-      }
-    ];
- 
+    ul.className += "pure-menu-list";
     $( "#restaurant" ).autocomplete({
       minLength: 0,
       //source: rests,
@@ -44,7 +27,7 @@
       }
     })
     .autocomplete( "instance" )._renderItem = function( ul, item ) {
-      return $( "<li>" )
+      return $( "<li class='pure-menu-item'>" )
         .append( "<a>" + item.label + "<br>" + item.address + "</a>" )
         .appendTo( ul );
     };

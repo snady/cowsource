@@ -8,6 +8,47 @@
 
     <link href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css" rel="stylesheet" >
     <link href="{{url_for('static', filename='pure.css')}}" rel="stylesheet" >
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+  <script>
+  console.log({{request.script_root}})
+  var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+  console.log($SCRIPT_ROOT)
+  $(function() {
+ 
+    $( "#restaurant" ).autocomplete({
+      minLength: 0,
+      //source: rests,
+      source: $SCRIPT_ROOT + "/autocomplete",
+      focus: function( event, ui ) {
+        $( "#restaurant" ).val( ui.item.label );
+        return false;
+      },
+      select: function( event, ui ) {
+        $( "#restaurant" ).val( ui.item.label );
+        $( "#restaurant-id" ).val( ui.item.id );
+        return false;
+      }
+    })
+    .autocomplete( "instance" )._renderItem = function( ul, item ) {
+        var d = document.getElementById("ui-id-1");
+        if ( !$("#ui-id-1").hasClass("pure-menu-list") ){
+            $("#ui-id-1").addClass(" pure-menu-list");
+        }
+      return $( "<li class='pure-menu-item'>" )
+        .append( "<a>" + item.label + "<br>" + item.address + "</a>" )
+        .appendTo( ul );
+    };
+  });
+  </script>
+  <style>
+  .ui-autocomplete .ui-menu-item{
+    background: #ffffff;
+    padding: 5px;
+    border: 1px;
+}
+  
+  </style>
 </head>
 
 <body>
@@ -33,11 +74,18 @@
             <label for="name">URL</label>
             <input name="path" type="text" placeholder="URL of image">
         </div>
-
+        <!--
         <div class="pure-control-group">
             <label for="password">Restaurant</label>
             <input name="rest" type="text" placeholder="Restaurant">
         </div>
+        !-->
+        <div class="pure-control-group" id="restaurant-label">
+            <label for="restaurant">Restaurant</label>
+            <input name="rest" type="text" placeholder="Restaurant" id="restaurant">
+            <input type="hidden" id="restaurant-id">
+        </div>
+
         <div class="pure-control-group">
             <label for="login">Price</label>
             <input name="price" type="text" placeholder="$$$cash money">
