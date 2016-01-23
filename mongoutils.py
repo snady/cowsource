@@ -1,5 +1,6 @@
 from pymongo import MongoClient
 import hashlib
+import simplejson, urllib2
 
 connection = MongoClient()
 db = connection['database']
@@ -140,7 +141,7 @@ def addRestaurant():
 def addRestaurant(cleany, yelpid):
     for i in cleany:
         if i['id'] == yelpid:
-            restsc.update({'_id':i['id']},{'name':i['name'], 'phone':i['phone'], 'address':i['address'], 'rating':i['rating']},{upsert:true})
+            restsc.update({'_id':i['id']},{'name':i['name'], 'phone':i['phone'], 'address':[i['location']['address'][0],i['location']['city'],i['location']['state_code'],i['location']['postal_code'],i['location']['coordinate']], 'rating':i['rating']},{upsert:true})
 
 def getRestaurant(yelpid):
     return restsc.findone({'_id':yelpid})
@@ -179,4 +180,19 @@ def searchRestaurant(query):
                     results[rest['_id']] += 1
     return sorted(results, key=results.get, reverse=True)
 
+def getNearby(lat,lng):
+    rests = getAllRestaurants()
+    for r in rests:
+        rcoord = r['address'][-1]
+        r['distance'] = getDistance(lat,lng,rcoord[0],rcoord[1])
+    srests = sorted(rests, key=lambda r:r[distance])
+    return srests
+
+##########APIs
+def getDistance(o_lat, o_lng, d_lat, d_lng):
+    url = 'https://maps.googleapis.com/maps/api/distancematrix/json?origins=%s,%s&destinations=%s,%s' % (o_lat, o_lng, d_lat, d_lng)
+    result = simplejson.load(urllib2.urlopen(url))
+    return result['rows'][0]['distance']['value']
+
+getDistance(40.60476,-73.95188,41.43206,-81.38992)
 ##########Comments

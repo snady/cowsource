@@ -54,7 +54,7 @@ def getRestaurant(limit=5):
         a={}
         a['id']=i['id']
         a['name']=i['name']
-        a['address']=[i['location']['address'][0],i['location']['city'],i['location']['state_code'],i['location']['postal_code']]
+        a['address']=[i['location']['address'][0],i['location']['city'],i['location']['state_code'],i['location']['postal_code'],i['location']['coordinate']]
         cleaned.append(a)
     return cleaned
     #address format = [street address, city, state, zip code]
