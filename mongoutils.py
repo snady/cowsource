@@ -9,7 +9,7 @@ postsc = db.posts
 restsc = db.rests
 
 '''
---------------------------------Users--------------------------------------------
+--------------------------------Users------------------------------------------
 '''
 
 '''
@@ -74,6 +74,7 @@ def getUserName(uid):
 Gets all users that are registered in the database
 
 Args:
+    none
     
 Returns:
     list of dictionaries containing each user's info
@@ -110,7 +111,7 @@ def addUser(username,password,email):
 #addUser('hellopyk','my','friend')
 
 '''
---------------------------------Posts--------------------------------------------
+--------------------------------Posts------------------------------------------
 '''
 
 '''
@@ -124,18 +125,23 @@ Returns:
 ''' 
 def getPost(idp):
     result = postsc.find_one({'_id':idp})
+    result['yelpname']=getRestaurantName(result['yelpid'])
     return result
 
 '''
 Gets all posts stored in the database
 
 Args:
+    none
     
 Returns:
     list of dictionaries containing post info
 ''' 
 def getAllPosts():
-    return list(postsc.find())
+    posts = list(postsc.find())
+    for p in posts:
+        p['yelpname']=getRestaurantName(p['yelpid'])
+    return posts
 
 '''
 Gets all posts stored in the database that were made by a specific user
@@ -147,7 +153,10 @@ Returns:
     list of dictionaries containing post info
 ''' 
 def getUserPosts(idu):
-    return list(postsc.find({'uid':idu}))
+    posts = list(postsc.find({'uid':idu}))
+    for p in posts:
+        p['yelpname']=getRestaurantName(p['yelpid'])
+    return posts
 
 '''
 def likePost(idu,idp):
@@ -169,6 +178,7 @@ Args:
     yelpid: string id used by Yelp to identify a restaurant
     
 Returns:
+    none
 '''
 def addRestaurant(yelpid):
     i = authy.get_business(yelpid)
@@ -180,13 +190,14 @@ Adds a post to the database, adds the restaurant with addRestaurant()
 Args:
     path: path to the image file
     tags: array of tags
-    name:
+    name: name of the food
     price: price of the food
     description: description of the food
     idu: user id
     idy: restaurant's yelp ID
     
 Returns:
+    none
 ''' 
 def writePost(path, tags, name, price, description, idu, idy):
     ps = getAllPosts()
@@ -194,22 +205,27 @@ def writePost(path, tags, name, price, description, idu, idy):
     if len(ps)==0:
         idp = 1
     else:
-        idp = ps[-1]['_id']+1    
-    r = {'_id':idp, 'tags':tags, 'likes':[], 'name':name, 'price':price, 'description':description, 'file':path, 'uid':idu, 'yelpid':idy}
+        idp = ps[-1]['_id']+1
+    tags = tags.split(',')
+    tags2 = []
+    for tag in tags:
+        tag = tag.strip().lower()
+        tags2.append(tag)
+    r = {'_id':idp, 'tags':tags2, 'likes':[], 'name':name, 'price':price, 'description':description, 'file':path, 'uid':idu, 'yelpid':idy}
     postsc.insert(r)
     if restsc.find_one({'_id':idy}) == None:
         addRestaurant(idy)
         print "need restaurant"
 
-#writePost("/path/",["hello","i","am","a","tag"],"nameoffood",3.14,"this is a nice pie", 2, "starbucks-brooklyn-39")
-#writePost("/path2/",["hello","i","am","another","tag"],"bestdrinkeva",6.28,"this is a nice frappuccino", 3, "starbucks-brooklyn-39")
-#writePost("/path3/",["hello","i","am","another","tag"],"coffeeman",3.28,"this is best coffee i rate 5/7", 3, "dunkin-donuts-boston-24")
+'''
+Looks through posts to find matching tags, names, or location
 
-def getRestaurant(yelpid):
-    return restsc.find_one({'_id':yelpid})
-
-def getAllRestaurants():
-    return list(restsc.find())
+Args:
+    query: string to look for
+    
+Returns:
+    array of post dictionaries that match query 
+'''
 
 def search(query):
     query = query.strip()
@@ -224,12 +240,87 @@ def search(query):
         result.extend(r)
         return result
     #retaurant name
-    r = list(postsc.find({'tags':{'$in':[query]}}))
+    r = list(postsc.find({'address':{'$in':[query]}}))
     if len(r)>0:
         result.extend(r)
         return result
     #location
 
+def getRestaurantName(yelpid):
+    try:
+        yelpname=getRestaurant(yelpid)['name']
+    except:
+        yelpname=''
+    return yelpname
+
+
+'''
+Gets the posts matching the yelpid
+
+Args:
+    yelpid: the yelpid to look for
+    
+Returns:
+    dictionary of post info if one is found
+    None otherwise
+'''
+def getRestaurantPosts(yelpid):
+    return list(postsc.find({'yelpid':yelpid}))
+
+'''
+Gets the restaurant matching the yelpid
+
+Args:
+    yelpid: the yelpid to look for
+    
+Returns:
+    dictionary of post info if one is found
+    None otherwise
+'''
+def getNearbyPosts(lat,lng):
+    rests = getNearbyRestaurants(lat,lng)
+    result = []
+    for r in rests:
+        result.extend(getRestaurantPosts(r['_id']))
+    return result
+
+#print getAllPosts()
+#print getRestaurantPosts("dunkin-donuts-boston-24")
+#writePost("/path/",["hello","i","am","a","tag"],"nameoffood",3.14,"this is a nice pie", 2, "starbucks-brooklyn-39")
+#writePost("/path2/",["hello","i","am","another","tag"],"bestdrinkeva",6.28,"this is a nice frappuccino", 3, "starbucks-brooklyn-39")
+#writePost("/path3/",["hello","i","am","another","tag"],"coffeeman",3.28,"this is best coffee i rate 5/7", 3, "dunkin-donuts-boston-24")
+#writePost("/path4/",["hello","i","am","so many","tags"],"coffeewoman",3.28,"this is best coffee i rate 7/5", 3, "dunkin-donuts-boston-24")
+
+'''
+--------------------------------Restaurants------------------------------------
+'''
+
+'''
+Gets the restaurant matching the yelpid
+
+Args:
+    yelpid: the yelpid to look for
+    
+Returns:
+    dictionary of post info if one is found
+    None otherwise
+'''
+def getRestaurant(yelpid):
+    return restsc.find_one({'_id':yelpid})
+
+'''
+Gets all restaurants in the database
+
+Args:
+    none
+    
+Returns:
+    list of restaurant dictionaries
+'''
+def getAllRestaurants():
+    return list(restsc.find())
+
+'''
 def searchRestaurant(query):
     queries = query.lower().split(' ')
     rests = getAllRestaurants()
@@ -241,8 +332,19 @@ def searchRestaurant(query):
                 if rest['_id'] not in results:
                     results[rest['_id']] += 1
     return sorted(results, key=results.get, reverse=True)
+'''
 
-def getNearby(lat,lng):
+'''
+Gets restaurants that are nearby
+
+Args:
+   lat:
+   lng:
+    
+Returns:
+    
+'''
+def getNearbyRestaurants(lat,lng):
     rests = getAllRestaurants()
     filtered = []
     for r in rests:
@@ -254,7 +356,19 @@ def getNearby(lat,lng):
     srests = sorted(filtered, key=lambda r:r['distance'])
     return srests
 
-##########APIs
+'''
+--------------------------------Miscellaneous----------------------------------
+'''
+
+'''
+Gets the distance between two points
+
+Args:
+    
+    
+Returns:
+    
+'''
 def getDistance(o_lat, o_lng, d_lat, d_lng):
     url = 'https://maps.googleapis.com/maps/api/distancematrix/json?origins=%s,%s&destinations=%s,%s' % (o_lat, o_lng, d_lat, d_lng)
     result = simplejson.load(urllib2.urlopen(url))
@@ -263,6 +377,6 @@ def getDistance(o_lat, o_lng, d_lat, d_lng):
 
 #getDistance(40.60476,-73.95188,41.43206,-81.38992)
 
-print getNearby(40.60476,-73.95188)
+print getNearbyPosts(40.60476,-73.95188)
 
 ##########Comments

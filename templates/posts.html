@@ -1,4 +1,69 @@
+<!doctype html>
 <html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Write Post</title>
+
+    <link href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css" rel="stylesheet" >
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/grids-responsive-min.css">
+    <link href="/static/pure.css" rel="stylesheet" >
+    <style>
+      .l-box {
+        padding: 0.5em;
+      }
+      .poster {
+      word-break: break-all;
+      word-wrap: break-word;
+      }
+    </style>
+</head>
+
+<body>
+    <div class="home-menu pure-menu pure-menu-horizontal">
+        <a href="#" class="pure-menu-heading">cowsource</a>
+        <ul class="pure-menu-list">
+            <li class="pure-menu-item"><a href="{{url_for('home')}}" class="pure-menu-link">Home</a></li>
+            <li class="pure-menu-item"><a href="{{url_for('about')}}" class="pure-menu-link">About</a></li>
+            <li class="pure-menu-item"><a href="{{url_for('makepost')}}" class="pure-menu-link">Make Post</a></li>
+            <li class="pure-menu-item"><a href="{{url_for('showposts', limi=30)}}" class="pure-menu-link">Find New</a></li>
+        </ul>
+	<form class="pure-form">
+	  <fieldset>
+
+            <input type="text" placeholder="Name of food/restaurant, tags">
+
+            <button name="search"  type="submit" class="pure-button pure-button-primary">Search</button>
+    </fieldset>
+</form>
+    </div>
+    <div class="pure-g">
+      {% for postrow in postsinrange %}
+      <div class="pure-u-1 pure-u-lg-1-5">
+      {% for posty in postrow %}
+      <div class="l-box">
+	<a href="{{url_for('showpost', idp = posty['_id'])}}">
+	  <img src="{{posty['file']}}" width=100% height=100%></img></a>
+	  <div class="pure-g poster">
+	  <div class="pure-u-1-2">
+	    <p>{{posty['name']}}<br><a href="http://yelp.com/biz/{{posty['yelpid']}}">{{posty['yelpname']}}</a></p></div>
+	    <div class="pure-u-1-2">
+	      <p>{{posty['likes']|length}} likes<br>
+		Tags:{{posty['tags']}}
+	      </p>
+	    </div>
+	  </div>
+	</div>
+	{% endfor %}
+      </div>
+     {% endfor %}
+    </div>
+</body>
+</html>
+
+
+<!---<html>
   <head>
   </head>
   <body>
@@ -15,3 +80,4 @@
     {% endfor %}
   </body>
   </html>
+!--->
