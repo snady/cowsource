@@ -1,8 +1,8 @@
 from flask import Flask, render_template, session, request
 from flask import redirect, url_for
 '''from pymongo import MongoClient
-import utils
-import mongoutils'''
+import utils'''
+import mongoutils
 import json
 import authy
 
@@ -74,7 +74,7 @@ def makepost():
                 name = request.form['name']
                 desc = request.form['description']
                 img = request.form['path']
-                rest = request.form['rest'] #need to replace with a yelp func that gets the yelp id instead of restaurant name
+                rest = request.form['restid']
                 price = request.form['price']
                 tags = request.form['tags']
                 user = session['user']
@@ -91,6 +91,10 @@ def showpost(idp):
         if 'user' not in session:
                 return redirect("/login")
         posty = mongoutils.getPost(idp)
+        try:
+                posty['yelpname']=mongoutils.getRestaurant(posty['yelpid'])['name']
+        except:
+                posty['yelpname']=''
         return render_template("post.html",posty=posty)
 
 

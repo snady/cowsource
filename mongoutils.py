@@ -206,7 +206,7 @@ def writePost(path, tags, name, price, description, idu, idy):
 #writePost("/path3/",["hello","i","am","another","tag"],"coffeeman",3.28,"this is best coffee i rate 5/7", 3, "dunkin-donuts-boston-24")
 
 def getRestaurant(yelpid):
-    return restsc.findone({'_id':yelpid})
+    return restsc.find_one({'_id':yelpid})
 
 def getAllRestaurants():
     return list(restsc.find())
