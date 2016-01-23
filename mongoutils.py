@@ -8,12 +8,18 @@ usersc = db.users
 postsc = db.posts
 restsc = db.rests
 
-#########Users
+'''
+--------------------------------Users--------------------------------------------
+'''
 
 '''
+Encrypts a password using the hashlib library for python
+
 Args:
-    
+    word: string to be encrypted
+
 Returns:
+    encrypted string
 '''
 def encrypt(word):
     hashp = hashlib.md5()
@@ -21,9 +27,15 @@ def encrypt(word):
     return hashp.hexdigest()
 
 '''
+Checks whether the username
+ 
 Args:
+    username: string username to be checked
+    password: string password to be checked    
     
 Returns:
+    True if both match
+    False otherwise
 '''
 def authenticate(username,password):
     result = list(usersc.find({'name':username}))
@@ -33,35 +45,53 @@ def authenticate(username,password):
     return False
 
 '''
+Gets the id that corresponds to a username
+
 Args:
+    username: string username
     
 Returns:
+    corresponding user id
 '''
 def getUserId(username):
     result = usersc.find_one({'name':username},{'_id':1})
     return result['_id']
 
 '''
+Gets the username that corresponds to a user id
+
 Args:
+    uid: user id 
     
 Returns:
+    corresponding username
 '''
 def getUserName(uid):
     result = usersc.find_one({'_id':uid},{'name':1})
     return result
 
 '''
+Gets all users that are registered in the database
+
 Args:
     
 Returns:
+    list of dictionaries containing each user's info
 ''' 
 def getAllUsers():
     return list(usersc.find())
 
 '''
+Registers a user into the database
+
 Args:
+    username: string username
+    password: string password
+    email: string email
     
 Returns:
+    True if the registration was successful
+    False otherwise
 '''
 def addUser(username,password,email):
     if usersc.find_one({'name':username}) == None:
@@ -78,28 +108,48 @@ def addUser(username,password,email):
     return False
                 
 #addUser('hellopyk','my','friend')
-##########Posts
 
 '''
+--------------------------------Posts--------------------------------------------
+'''
+
+'''
+Gets the info corresponding to a post id
+
 Args:
+    idp: post id
     
 Returns:
+    dictionary containing post info
 ''' 
 def getPost(idp):
     result = postsc.find_one({'_id':idp})
     return result
 
 '''
+Gets all posts stored in the database
+
 Args:
     
 Returns:
+    list of dictionaries containing post info
 ''' 
 def getAllPosts():
     return list(postsc.find())
 
+'''
+Gets all posts stored in the database that were made by a specific user
+
+Args:
+    idu: user id to checl
+    
+Returns:
+    list of dictionaries containing post info
+''' 
 def getUserPosts(idu):
     return list(postsc.find({'uid':idu}))
 
+'''
 def likePost(idu,idp):
     p = postsc.find_one({'_id:':idp})
     if not liked(idu,idp):
@@ -110,20 +160,31 @@ def likePost(idu,idp):
 def liked(idu,idp):
     p = postsc.find_one({'_id:':idp})
     return idu in p['likes']
+'''
 
 '''
+Adds a restaurant to the database using information from the Yelp API
+
 Args:
+    yelpid: string id used by Yelp to identify a restaurant
     
 Returns:
-
 '''
 def addRestaurant(yelpid):
     i = authy.get_business(yelpid)
     restsc.insert({'_id':i['id'], 'name':i['name'], 'phone':i['phone'], 'address':[i['location']['address'][0],i['location']['city'],i['location']['state_code'],i['location']['postal_code'],i['location']['coordinate']], 'rating':i['rating']})
 
-
 '''
+Adds a post to the database, adds the restaurant with addRestaurant()
+
 Args:
+    path: path to the image file
+    tags: array of tags
+    name:
+    price: price of the food
+    description: description of the food
+    idu: user id
+    idy: restaurant's yelp ID
     
 Returns:
 ''' 
