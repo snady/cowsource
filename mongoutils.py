@@ -1,5 +1,5 @@
 from pymongo import MongoClient
-import hashlib
+import hashlib, authy
 import simplejson, urllib2
 
 connection = MongoClient()
@@ -115,6 +115,17 @@ def liked(idu,idp):
 Args:
     
 Returns:
+
+'''
+def addRestaurant(yelpid):
+    i = authy.get_business(yelpid)
+    restsc.insert({'_id':i['id'], 'name':i['name'], 'phone':i['phone'], 'address':[i['location']['address'][0],i['location']['city'],i['location']['state_code'],i['location']['postal_code'],i['location']['coordinate']], 'rating':i['rating']})
+
+
+'''
+Args:
+    
+Returns:
 ''' 
 def writePost(path, tags, name, price, description, idu, idy):
     ps = getAllPosts()
@@ -126,22 +137,12 @@ def writePost(path, tags, name, price, description, idu, idy):
     r = {'_id':idp, 'tags':tags, 'likes':[], 'name':name, 'price':price, 'description':description, 'file':path, 'uid':idu, 'yelpid':idy}
     postsc.insert(r)
     if restsc.find_one({'_id':idy}) == None:
-        #addRestaurant(idy)
+        addRestaurant(idy)
         print "need restaurant"
 
-#writePost("/path/",["hello","i","am","a","tag"],"nameoffood",3.14,"this is a nice pie", 2, "coolest-restaurant")
-
-'''
-Args:
-    
-Returns:
-
-def addRestaurant():
-'''
-def addRestaurant(cleany, yelpid):
-    for i in cleany:
-        if i['id'] == yelpid:
-            restsc.update({'_id':i['id']},{'name':i['name'], 'phone':i['phone'], 'address':[i['location']['address'][0],i['location']['city'],i['location']['state_code'],i['location']['postal_code'],i['location']['coordinate']], 'rating':i['rating']},{upsert:true})
+writePost("/path/",["hello","i","am","a","tag"],"nameoffood",3.14,"this is a nice pie", 2, "starbucks-brooklyn-39")
+writePost("/path2/",["hello","i","am","another","tag"],"bestdrinkeva",6.28,"this is a nice frappuccino", 3, "starbucks-brooklyn-39")
+writePost("/path3/",["hello","i","am","another","tag"],"coffeeman",3.28,"this is best coffee i rate 5/7", 3, "dunkin-donuts-boston-24")
 
 def getRestaurant(yelpid):
     return restsc.findone({'_id':yelpid})
@@ -182,9 +183,13 @@ def searchRestaurant(query):
 
 def getNearby(lat,lng):
     rests = getAllRestaurants()
+    filtered = {}
     for r in rests:
         rcoord = r['address'][-1]
-        r['distance'] = getDistance(lat,lng,rcoord[0],rcoord[1])
+        dist = getDistance(lat,lng,rcoord[0],rcoord[1])
+        if dist < 10000:
+            r['distance'] = distance
+            filtered.append(r) 
     srests = sorted(rests, key=lambda r:r[distance])
     return srests
 
@@ -194,5 +199,8 @@ def getDistance(o_lat, o_lng, d_lat, d_lng):
     result = simplejson.load(urllib2.urlopen(url))
     return result['rows'][0]['distance']['value']
 
-getDistance(40.60476,-73.95188,41.43206,-81.38992)
+#getDistance(40.60476,-73.95188,41.43206,-81.38992)
+
+
+
 ##########Comments
