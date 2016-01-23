@@ -1,8 +1,8 @@
 from flask import Flask, render_template, session, request
 from flask import redirect, url_for
-from pymongo import MongoClient
+'''from pymongo import MongoClient
 import utils
-import mongoutils
+import mongoutils'''
 import json
 import authy
 
@@ -147,6 +147,14 @@ def sriracha():
 @app.route("/nearby")
 def nearby():
 	return render_template("homhom.html")
+
+@app.route("/location", methods = ['GET','POST'])
+def location():
+	lati = request.json['latitude']
+    	longi = request.json['longitude']
+	print lati,longi
+	#mongoutils.getNearby(lati,longi)
+	return json.dumps({})
 
 if __name__ == "__main__":
         app.secret_key = "hello"
