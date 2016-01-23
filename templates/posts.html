@@ -32,9 +32,9 @@
 	<form class="pure-form">
 	  <fieldset>
 
-            <input type="text" placeholder="Name of food/restaurant, tags">
+            <input type="text" name="query" placeholder="Name of food/restaurant, tags">
 
-            <button name="search"  type="submit" class="pure-button pure-button-primary">Search</button>
+            <button name="search" type="submit" class="pure-button pure-button-primary">Search</button>
     </fieldset>
 </form>
     </div>
@@ -50,7 +50,9 @@
 	    <p>{{posty['name']}}<br><a href="http://yelp.com/biz/{{posty['yelpid']}}">{{posty['yelpname']}}</a></p></div>
 	    <div class="pure-u-1-2">
 	      <p>{{posty['likes']|length}} likes<br>
-		Tags:{{posty['tags']}}
+		Tags:{% for tag in posty['tags'] %}
+		{{tag}}
+		{% endfor %}
 	      </p>
 	    </div>
 	  </div>

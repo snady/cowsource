@@ -1,4 +1,5 @@
 from pymongo import MongoClient
+import pymongo
 import hashlib, authy
 import simplejson, urllib2
 
@@ -230,21 +231,15 @@ Returns:
 def search(query):
     query = query.strip()
     result = {}
-    r = list(postsc.find({'tags':{'$in':[query]}}))
-    if len(r)>0:
-        result.extend(r)
-        return result
-    #name
-    r = list(postsc.find({'name':{'$in':[query]}}))
-    if len(r)>0:
-        result.extend(r)
-        return result
-    #retaurant name
-    r = list(postsc.find({'address':{'$in':[query]}}))
-    if len(r)>0:
-        result.extend(r)
-        return result
-    #location
+    postsc.create_index([('tags',pymongo.TEXT),('name',pymongo.TEXT)])
+    restsc.create_index([('address',pymongo.TEXT),('name',pymongo.TEXT)])
+    r = list(restsc.find({'$text': {'$search': query}}, {'score':{'$meta': "textScore"}}).sort([('score',{'$meta':"textScore"})]))
+    q = list(postsc.find({'$text': {'$search': query}}, {'score':{'$meta': "textScore"}}).sort([('score',{'$meta':"textScore"})]))
+    for rest in r:
+        for post in q:
+            if post['yelpid'] == rest['_id']:
+                post['score'] += rest['score']
+    return sorted(list(q), key = lambda k: k['score'], reverse=True)
 
 def getRestaurantName(yelpid):
     try:
@@ -252,8 +247,7 @@ def getRestaurantName(yelpid):
     except:
         yelpname=''
     return yelpname
-
-
+                                                                                                           
 '''
 Gets the posts matching the yelpid
 
@@ -377,6 +371,8 @@ def getDistance(o_lat, o_lng, d_lat, d_lng):
 
 #getDistance(40.60476,-73.95188,41.43206,-81.38992)
 
-print getNearbyPosts(40.60476,-73.95188)
+#print getNearbyPosts(40.60476,-73.95188)
 
 ##########Comments
+
+#print search('pizza ave')
