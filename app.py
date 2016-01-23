@@ -25,7 +25,7 @@ def login():
                         if mongoutils.authenticate(user,password):
                                 session['user'] = user
                                 message = "You are now logged in!"
-                                return render_template("home.html",message=message)
+                                return redirect(url_for('showposts', limi = 30))
                         else:
                                 error = "Incorrect Username or Password. Try Again."
                                 return render_template("index.html",error=error)            
@@ -91,10 +91,6 @@ def showpost(idp):
         if 'user' not in session:
                 return redirect("/login")
         posty = mongoutils.getPost(idp)
-        try:
-                posty['yelpname']=mongoutils.getRestaurant(posty['yelpid'])['name']
-        except:
-                posty['yelpname']=''
         return render_template("post.html",posty=posty)
 
 
@@ -104,10 +100,11 @@ def showposts(limi):
         if 'user' not in session:
                 return redirect("/login")
         posts = mongoutils.getAllPosts()
-        postsinrange = []
+        postsinrange = [[],[],[],[],[]]
         i = 0
         for post in posts[-1:-limi-1:-1]:
-                postsinrange.append(post)
+                postsinrange[i%5].append(post)
+                i += 1
         return render_template("posts.html",postsinrange=postsinrange)
 
 @app.route("/user/<int:idu>")
@@ -159,6 +156,10 @@ def location():
 	print lati,longi
 	#mongoutils.getNearby(lati,longi)
 	return json.dumps({})
+
+@app.route("/about")
+def about():
+        pass
 
 if __name__ == "__main__":
         app.secret_key = "hello"

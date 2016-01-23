@@ -124,6 +124,7 @@ Returns:
 ''' 
 def getPost(idp):
     result = postsc.find_one({'_id':idp})
+    result['yelpname']=getRestaurantName(result['yelpid'])
     return result
 
 '''
@@ -135,7 +136,10 @@ Returns:
     list of dictionaries containing post info
 ''' 
 def getAllPosts():
-    return list(postsc.find())
+    posts = list(postsc.find())
+    for p in posts:
+        p['yelpname']=getRestaurantName(p['yelpid'])
+    return posts
 
 '''
 Gets all posts stored in the database that were made by a specific user
@@ -147,7 +151,10 @@ Returns:
     list of dictionaries containing post info
 ''' 
 def getUserPosts(idu):
-    return list(postsc.find({'uid':idu}))
+    posts = list(postsc.find({'uid':idu}))
+    for p in posts:
+        p['yelpname']=getRestaurantName(p['yelpid'])
+    return posts
 
 '''
 def likePost(idu,idp):
@@ -194,8 +201,13 @@ def writePost(path, tags, name, price, description, idu, idy):
     if len(ps)==0:
         idp = 1
     else:
-        idp = ps[-1]['_id']+1    
-    r = {'_id':idp, 'tags':tags, 'likes':[], 'name':name, 'price':price, 'description':description, 'file':path, 'uid':idu, 'yelpid':idy}
+        idp = ps[-1]['_id']+1
+    tags = tags.split(',')
+    tags2 = []
+    for tag in tags:
+        tag = tag.strip().lower()
+        tags2.append(tag)
+    r = {'_id':idp, 'tags':tags2, 'likes':[], 'name':name, 'price':price, 'description':description, 'file':path, 'uid':idu, 'yelpid':idy}
     postsc.insert(r)
     if restsc.find_one({'_id':idy}) == None:
         addRestaurant(idy)
@@ -211,6 +223,13 @@ def getRestaurant(yelpid):
 def getAllRestaurants():
     return list(restsc.find())
 
+def getRestaurantName(yelpid):
+    try:
+        yelpname=getRestaurant(yelpid)['name']
+    except:
+        yelpname=''
+    return yelpname
+
 def search(query):
     query = query.strip()
     result = {}
@@ -224,7 +243,7 @@ def search(query):
         result.extend(r)
         return result
     #retaurant name
-    r = list(postsc.find({'tags':{'$in':[query]}}))
+    r = list(postsc.find({'address':{'$in':[query]}}))
     if len(r)>0:
         result.extend(r)
         return result
