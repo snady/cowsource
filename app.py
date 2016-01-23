@@ -154,11 +154,13 @@ def nearby():
 
 @app.route("/location", methods = ['GET','POST'])
 def location():
-	lati = request.json['latitude']
-    	longi = request.json['longitude']
-	print lati,longi
-	#mongoutils.getNearby(lati,longi)
-	return json.dumps({})
+    lati = request.json['latitude']
+    longi = request.json['longitude']
+    print lati,longi
+	#mongoutils.getNearbyPosts(lati,longi)
+    jason = json.dumps(mongoutils.getNearbyPosts(lati,longi))
+    print jason
+    return jason
 
 if __name__ == "__main__":
         app.secret_key = "hello"

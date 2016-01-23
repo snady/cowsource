@@ -21,6 +21,7 @@ p {
  */
 .l-content {
     margin: 0 auto;
+    border: 1px;
 }
 
 .l-box {
@@ -88,7 +89,6 @@ p {
     margin: 0 auto;
  }
 .pricing-tables {
-    margin-bottom: 3.125em;
     text-align: center;
 }
 
@@ -98,8 +98,9 @@ p {
  */
 .pricing-table {
     border: 1px solid #ddd;
-    margin: 0 0.5em 2em;
+    /*margin: 0 0.5em 2em;
     padding: 0 0 3em;
+    */
 }
 
 /*

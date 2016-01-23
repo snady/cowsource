@@ -1,6 +1,105 @@
+<!doctype html>
 <html>
-<body>
-<h1>{{message}}</h1>
-</body>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <title>Home</title>
+
+    <link href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css" rel="stylesheet" >
+    <link href="{{url_for('static', filename='pure.css')}}" rel="stylesheet" >
+    <style>
+    /*
+	.crop {
+    width: 200px;
+    height: 250px;
+    overflow: hidden;
+	}
+	.crop img {
+    width: 400px;
+    height: 300px;
+    margin: 0 0 0 0px;
+	}
+	*/
+	.pure-img-responsive {
+    max-width: 100%;
+    height: 300px;
+	}
+	</style>
+</head>
+
+<body>
+    <div class="home-menu pure-menu pure-menu-horizontal">
+        <a href="#" class="pure-menu-heading">cowsource</a>
+        <ul class="pure-menu-list">
+            <li class="pure-menu-item"><a href="#" class="pure-menu-link">Home</a></li>
+            <li class="pure-menu-item"><a href="#" class="pure-menu-link">About</a></li>
+            <li class="pure-menu-item"><a href="#" class="pure-menu-link">Make Post</a></li>
+            <li class="pure-menu-item"><a href="#" class="pure-menu-link">Find New</a></li>
+        </ul>
+    </div>
+    <div class="l-content">
+    <div class="pricing-tables pure-g">
+        <div class="pure-u-1-4">
+            <div class="pricing-table pricing-table-free">
+            		<tr>
+            			<td>	
+            				<img class="pure-img-responsive" src="https://i.imgur.com/rKRJ0aW.jpg">
+            			</td>
+            		</tr>
+            		<tr>
+            			<td>
+            				<p>Cat</p>
+            			</td>
+            		</tr>
+            </div>
+        </div>
+        <div class="pure-u-1-4">
+            <div class="pricing-table pricing-table-free">
+            		<tr>
+            			<td>	
+            				<img class="pure-img-responsive" src="https://i.imgur.com/IDdzt2d.jpg">
+            			</td>
+            		</tr>
+            		<tr>
+            			<td>
+            				<p>Another Cat</p>
+            			</td>
+            		</tr>
+            </div>
+        </div>
+    </div>
+        <div class="pricing-tables pure-g">
+        <div class="pure-u-1-4">
+            <div class="pricing-table pricing-table-free">
+            		<tr>
+            			<td>	
+            				<img class="pure-img-responsive" src="https://i.imgur.com/rKRJ0aW.jpg">
+            			</td>
+            		</tr>
+            		<tr>
+            			<td>
+            				<p>Cat</p>
+            			</td>
+            		</tr>
+            </div>
+        </div>
+        <div class="pure-u-1-4">
+            <div class="pricing-table pricing-table-free">
+            		<tr>
+            			<td>	
+            				<img class="pure-img-responsive" src="https://i.imgur.com/IDdzt2d.jpg">
+            			</td>
+            		</tr>
+            		<tr>
+            			<td>
+            				<p>Another Cat</p>
+            			</td>
+            		</tr>
+            </div>
+        </div>
+    </div>
+
+	</div>
+</body>
 </html>
