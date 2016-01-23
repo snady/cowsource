@@ -144,6 +144,10 @@ def autocomplete():
 def sriracha():
 	return render_template("otto.html")
 
+@app.route("/nearby")
+def nearby():
+	return render_template("homhom.html")
+
 if __name__ == "__main__":
         app.secret_key = "hello"
         app.debug = True
