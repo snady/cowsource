@@ -94,10 +94,8 @@ def makepost():
                 tags = request.form['tags']
                 user = session['user']
                 idu = mongoutils.getUserId(user)
-                mongoutils.writePost(img,tags,name,price,desc,idu,rest)
-                message = "Post created!"
-                print mongoutils.getAllPosts()
-                return render_template("home.html",message=message)
+                idp = mongoutils.writePost(img,tags,name,price,desc,idu,rest)
+                return redirect(url_for('showpost',idp=idp))
         else:
                 return render_template("writepost.html")
 
@@ -117,23 +115,21 @@ def showpost(idp):
 #shows newest limi number of posts
 @app.route("/posts/", methods = ['GET', 'POST'])
 @app.route("/posts/<int:limi>", methods = ['GET', 'POST'])
-@app.route("/posts/<int:start>/<int:limi>", methods = ['GET', 'POST'])
 def showposts(limi=30,start=None):
+        display_msg  = ""
         if 'user' not in session:
                 return redirect("/login")
         if 'search' in request.args:
                 print request.args['query']
                 posts = mongoutils.search(request.args['query'])
+                display_msg = "Search for %s" % (request.args['query'])
         else:
                 posts = mongoutils.getAllPosts()
-        postsinrange = [[],[],[],[],[]]
-        i = 0
-        if start==None:
-                start = 1
-        for post in posts[-start:-limi-start:-1]:
-                postsinrange[i%5].append(post)
-                i += 1
-        return render_template("posts.html",postsinrange=postsinrange)
+                display_msg = "Browse"
+        for post in posts:
+            post['restaurant'] = mongoutils.getRestaurantName(post['yelpid'])
+        #print posts
+        return render_template("posts.html",posts=posts,display_msg=display_msg)
 
 @app.route("/user/<int:idu>")
 def user(idu):
@@ -141,12 +137,7 @@ def user(idu):
                 return redirect("/login")
         userposts = mongoutils.getUserPosts(idu)
         username = mongoutils.getUserName(idu)
-        postsinrange = [[],[],[],[],[]]
-        i = 0
-        for post in userposts[-1::-1]:
-                postsinrange[i%5].append(post)
-                i += 1
-        return render_template("user.html",postsinrange=postsinrange,username=username)
+        return render_template("user.html",postsinrange=userposts,username=username)
                 
         
 @app.route("/logout")
@@ -161,7 +152,7 @@ def home():
     jason = mongoutils.getNearbyPosts(lati,longi)
     location = mongoutils.getCityState(lati,longi)
     for post in jason:
-        post['restaurant'] = mongoutils.getRestaurant(post['yelpid'])
+        post['restaurant'] = mongoutils.getRestaurantName(post['yelpid'])
     return render_template("home.html",json=jason,location=location)
  
     

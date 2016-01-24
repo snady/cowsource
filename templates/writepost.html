@@ -55,10 +55,10 @@
     <div class="home-menu pure-menu pure-menu-horizontal">
         <a href="#" class="pure-menu-heading">cowsource</a>
         <ul class="pure-menu-list">
-            <li class="pure-menu-item"><a href="url_for('home')" class="pure-menu-link">Home</a></li>
-            <li class="pure-menu-item"><a href="url_for('about')" class="url_for('about')">About</a></li>
-            <li class="pure-menu-item"><a href="url_for('makepost')" class="url_for('makepost')">Make Post</a></li>
-            <li class="pure-menu-item"><a href="url_for('posts', limi=30)" class="pure-menu-link">Find New</a></li>
+            <li class="pure-menu-item"><a href="{{url_for('home')}}" class="pure-menu-link">Home</a></li>
+            <li class="pure-menu-item"><a href="{{url_for('about')}}" class="pure-menu-link">About</a></li>
+            <li class="pure-menu-item"><a href="{{url_for('makepost')}}" class="pure-menu-link">Make Post</a></li>
+            <li class="pure-menu-item"><a href="{{url_for('showposts', limi=30)}}" class="pure-menu-link">Find New</a></li>
         </ul>
     </div>
     <div class="pure-g">

@@ -221,6 +221,7 @@ def writePost(path, tags, name, price, description, idu, idy):
     if restsc.find_one({'_id':idy}) == None:
         addRestaurant(idy)
         print "need restaurant"
+    return idp
 
 '''
 Looks through posts to find matching tags, names, or location
@@ -321,6 +322,11 @@ Returns:
 def getRestaurant(yelpid):
     return restsc.find_one({'_id':yelpid})
 
+def getRestaurantName(yelpid):
+    if restsc.find_one({'_id':yelpid}) == None:
+        return yelpid
+    return restsc.find_one({'_id':yelpid})['name']
+
 '''
 Gets all restaurants in the database
 
@@ -401,6 +407,8 @@ def getCityState(o_lat, o_lng):
 #print getNearbyPosts(40.60476,-73.95188)
 
 #print getCityState(42.376765, -71.116724)
+
+#print getRestaurantName("audreys-concerto-brooklyn")
 
 ##########Comments
 
