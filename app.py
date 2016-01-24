@@ -76,6 +76,8 @@ def see():
 def makepost():
         if 'user' not in session:
                 return redirect ("/login")
+	if 'search' in request.args:
+		return redirect("/showposts",search = request.args['search'])
         if request.method == 'POST':
                 print request.form
                 name = request.form['name']
@@ -98,6 +100,8 @@ def makepost():
 def showpost(idp):
         if 'user' not in session:
                 return redirect("/login")
+	if 'search' in request.args:
+		return redirect("/showposts",search = request.args['search'])
         if request.method == 'POST':
                 if 'remove' in request.form:
                         mongoutils.removePost(idp)
@@ -153,13 +157,11 @@ def restaurant(yelpid):
 def user(idu):
         if 'user' not in session:
                 return redirect("/login")
+	if 'search' in request.args:
+		return redirect("/showposts",search = request.args['search'])
         userposts = mongoutils.getUserPosts(idu)
         username = mongoutils.getUserName(idu)
-        print idu
-        print "USER POSTS: ",userposts
-        print "USER NAME: ",username
-        return render_template("user.html",postsinrange=userposts,username=username)
-                
+        return render_template("user.html",posts=userposts,username=username)
         
 @app.route("/logout")
 def logout():
@@ -170,6 +172,8 @@ def logout():
 def home():
     if 'lati' not in session or 'longi' not in session:
             return render_template("home.html")
+    if 'search' in request.args:
+	    return redirect("/showposts",search = request.args['search'])
     lati = session['lati']
     longi = session['longi']
     jason = mongoutils.getNearbyPosts(lati,longi)
@@ -213,6 +217,7 @@ def about():
 if __name__ == '__main__':
         app.secret_key = "hello"
         app.debug = True
+        app.threaded = True
         app.run(host='0.0.0.0', port=8000)
 else:
         app.secret_key = "hello"

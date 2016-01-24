@@ -11,29 +11,21 @@ restsc = db.rests
 commsc = db.comms
 
 '''
+-------------------------------------------------------------------------------
 --------------------------------Users------------------------------------------
+-------------------------------------------------------------------------------
 '''
 
 '''
-Encrypts a password using the hashlib library for python
-
-Args:
-    word: string to be encrypted
-
-Returns:
-    encrypted string
+________________________________Login__________________________________________
 '''
-def encrypt(word):
-    hashp = hashlib.md5()
-    hashp.update(word)
-    return hashp.hexdigest()
 
 '''
-Checks whether the username
+Checks whether the username and password match a registered user 
  
 Args:
-    username: string username to be checked
-    password: string password to be checked    
+    username: username to be checked
+    password: password to be checked    
     
 Returns:
     True if both match
@@ -50,7 +42,7 @@ def authenticate(username,password):
 Gets the id that corresponds to a username
 
 Args:
-    username: string username
+    username: username
     
 Returns:
     corresponding user id
@@ -85,6 +77,10 @@ def getAllUsers():
     return list(usersc.find())
 
 '''
+________________________________Changing_______________________________________
+'''
+
+'''
 Registers a user into the database
 
 Args:
@@ -110,10 +106,14 @@ def addUser(username,password,email):
         return True
     return False
                 
-#addUser('hellopyk','my','friend')
+'''
+-------------------------------------------------------------------------------
+--------------------------------Posts------------------------------------------
+-------------------------------------------------------------------------------
+'''
 
 '''
---------------------------------Posts------------------------------------------
+________________________________Getting________________________________________
 '''
 
 '''
@@ -149,7 +149,7 @@ def getAllPosts():
 Gets all posts stored in the database that were made by a specific user
 
 Args:
-    idu: user id to checl
+    idu: user id to check
     
 Returns:
     list of dictionaries containing post info
@@ -157,37 +157,26 @@ Returns:
 def getUserPosts(idu):
     posts = list(postsc.find({'uid':idu}))
     for p in posts:
-        p['yelpname']=getRestaurantName(p['yelpid'])
+        p['restaurant']=getRestaurantName(p['yelpid'])
     return posts
 
-
-def likePost(idu,idp):
-    p = postsc.find_one({'_id':idp})
-    if not liked(idu,idp):
-        p['likes'].append(idu)
-    else:
-        p['likes'].remove(idu)
-    postsc.update_one({'_id':idp},{'$set':{'likes':p['likes']}})
-    return p['likes']
-
-def liked(idu,idp):
-    p = postsc.find_one({'_id':idp})
-    print p
-    return (idu in p['likes'])
-
-
 '''
-Adds a restaurant to the database using information from the Yelp API
+Gets the posts matching the yelpid
 
 Args:
-    yelpid: string id used by Yelp to identify a restaurant
+    yelpid: the yelpid to look for
     
 Returns:
-    none
+    dictionary of post info if one is found
+    None otherwise
 '''
-def addRestaurant(yelpid):
-    i = authy.get_business(yelpid)
-    restsc.insert({'_id':i['id'], 'name':i['name'], 'phone':i['phone'], 'address':[i['location']['address'][0],i['location']['city'],i['location']['state_code'],i['location']['postal_code'],i['location']['coordinate']], 'rating':i['rating']})
+def getRestaurantPosts(yelpid):
+    return list(postsc.find({'yelpid':yelpid}))
+
+'''
+________________________________Changing_______________________________________
+'''
+
 
 '''
 Adds a post to the database, adds the restaurant with addRestaurant()
@@ -216,16 +205,70 @@ def writePost(path, tags, name, price, description, idu, idy):
     for tag in tags:
         tag = tag.strip().lower()
         tags2.append(tag)
-    r = {'_id':idp, 'tags':tags2, 'likes':[], 'name':name, 'price':price, 'description':description, 'file':path, 'uid':idu, 'yelpid':idy}
+    r = {'_id':idp, 'tags':tags2, 'likes':[], 'name':name, 'price':price, 
+         'description':description, 'file':path, 'uid':idu, 'yelpid':idy}
     postsc.insert(r)
     if restsc.find_one({'_id':idy}) == None:
         addRestaurant(idy)
         print "need restaurant"
     return idp
 
+'''
+Removes a post from the database
+
+Args:
+    idp: id of post to remove
+    
+Returns:
+    none
+'''
 
 def removePost(idp):
     postsc.remove({'_id':idp})
+
+'''
+________________________________Liking_________________________________________
+'''
+
+'''
+Adds a user id to list of users who liked a post
+
+Args:
+    idu: user id that wants to like
+    idp: post id of post to be liked
+    
+Returns:
+    Array of user ids that liked the post
+'''
+def likePost(idu,idp):
+    p = postsc.find_one({'_id':idp})
+    if not liked(idu,idp):
+        p['likes'].append(idu)
+    else:
+        p['likes'].remove(idu)
+    postsc.update_one({'_id':idp},{'$set':{'likes':p['likes']}})
+    return p['likes']
+
+'''
+Checks whether a user has liked a post
+
+Args:
+    idu: user id to check
+    idp: post id to check
+    
+Returns:
+    True if liked
+    False otherwise
+'''
+def liked(idu,idp):
+    p = postsc.find_one({'_id':idp})
+    print p
+    return (idu in p['likes'])
+
+'''
+________________________________Searching______________________________________
+'''
+
 '''
 Looks through posts to find matching tags, names, or location
 
@@ -235,42 +278,34 @@ Args:
 Returns:
     array of post dictionaries that match query 
 '''
-
 def search(query):
     query = query.strip()
     result = {}
     postsc.create_index([('tags',pymongo.TEXT),('name',pymongo.TEXT)])
     restsc.create_index([('address',pymongo.TEXT),('name',pymongo.TEXT)])
-    r = list(restsc.find({'$text': {'$search': query}}, {'score':{'$meta': "textScore"}}).sort([('score',{'$meta':"textScore"})]))
-    q = list(postsc.find({'$text': {'$search': query}}, {'score':{'$meta': "textScore"}}).sort([('score',{'$meta':"textScore"})]))
+    r = list(restsc.find({'$text': {'$search': query}}, 
+                         {'score':{'$meta': "textScore"}}).sort(
+                             [('score',{'$meta':"textScore"})]))
+    q = list(postsc.find({'$text': {'$search': query}}, 
+                         {'score':{'$meta': "textScore"}}).sort(
+                             [('score',{'$meta':"textScore"})]))
     for rest in r:
         for post in q:
             if post['yelpid'] == rest['_id']:
                 post['score'] += rest['score']
     return sorted(list(q), key = lambda k: k['score'], reverse=True)
-                                                                                                           
+
 '''
-Gets the posts matching the yelpid
+Searches for posts from nearby restaurants
+Uses getNearbyRestaurants() to find the nearby restaurants
+Uses getRestaurantPosts() to get the posts from these restaurants
 
 Args:
-    yelpid: the yelpid to look for
+    lat: latitude of user
+    lng: longitude of user
     
 Returns:
-    dictionary of post info if one is found
-    None otherwise
-'''
-def getRestaurantPosts(yelpid):
-    return list(postsc.find({'yelpid':yelpid}))
-
-'''
-Gets the restaurant matching the yelpid
-
-Args:
-    yelpid: the yelpid to look for
-    
-Returns:
-    dictionary of post info if one is found
-    None otherwise
+    List of dictionaries with nearby posts post info
 '''
 def getNearbyPosts(lat,lng):
     rests = getNearbyRestaurants(lat,lng)
@@ -279,33 +314,64 @@ def getNearbyPosts(lat,lng):
         result.extend(getRestaurantPosts(r['_id']))
     return result
 
-#print getAllPosts()
-#print getRestaurantPosts("dunkin-donuts-boston-24")
-#writePost("/path/",["hello","i","am","a","tag"],"nameoffood",3.14,"this is a nice pie", 2, "starbucks-brooklyn-39")
-#writePost("/path2/",["hello","i","am","another","tag"],"bestdrinkeva",6.28,"this is a nice frappuccino", 3, "starbucks-brooklyn-39")
-#writePost("/path3/",["hello","i","am","another","tag"],"coffeeman",3.28,"this is best coffee i rate 5/7", 3, "dunkin-donuts-boston-24")
-#writePost("/path4/",["hello","i","am","so many","tags"],"coffeewoman",3.28,"this is best coffee i rate 7/5", 3, "dunkin-donuts-boston-24")
+'''
+-------------------------------------------------------------------------------
+--------------------------------Comments---------------------------------------
+-------------------------------------------------------------------------------
+'''
 
 '''
---------------------------------Comments---------------------------------------
+Adds a comment to the database
+
+Args:
+    idu: id of user that made the comment
+    idp: id of post on which the comment is made
+    content: text of the comment
+    time: time the comment was made
+    
+Returns:
+    none
 '''
 def addComment(idu,idp,content,time):
     idc = len(list(commsc.find()))+1
     commsc.insert({'_id':idc,'uid':idu,'pid':idp,'content':content,
                     'time': time  })
+   
+'''
+Removes a comment from the database
+
+Args:
+    idc: id of the comment to remove
     
+Returns:
+    none
+''' 
 def removeComment(idc):
     commsc.remove({'_id':idc})
 
+'''
+Gets the comments on a post
+
+Args:
+    idp: post id to get comments from
+    
+Returns:
+    list of comment dictionaries
+'''
 def getComments(idp):
     commy = list(commsc.find({'pid':idp}))
     for c in commy:
         c['name'] = getUserName(c['uid'])
     return commy
 
+'''
+-------------------------------------------------------------------------------
+--------------------------------Restaurants------------------------------------
+-------------------------------------------------------------------------------
+'''
 
 '''
---------------------------------Restaurants------------------------------------
+________________________________Getting________________________________________
 '''
 
 '''
@@ -321,6 +387,15 @@ Returns:
 def getRestaurant(yelpid):
     return restsc.find_one({'_id':yelpid})
 
+'''
+Gets the name of the restaurant matching the yelpid
+
+Args:
+    yelpid: the yelpid to look for
+    
+Returns:
+    name of restaurant
+'''
 def getRestaurantName(yelpid):
     if restsc.find_one({'_id':yelpid}) == None:
         return yelpid
@@ -339,28 +414,14 @@ def getAllRestaurants():
     return list(restsc.find())
 
 '''
-def searchRestaurant(query):
-    queries = query.lower().split(' ')
-    rests = getAllRestaurants()
-    results = {}
-    for rest in rests:
-        words = rest['name'].lower()
-        for q in queries:
-            if words.find(q) != -1:
-                if rest['_id'] not in results:
-                    results[rest['_id']] += 1
-    return sorted(results, key=results.get, reverse=True)
-'''
-
-'''
 Gets restaurants that are nearby
 
 Args:
-   lat:
-   lng:
+    lat: latitude of user
+    lng: longitude of user
     
 Returns:
-    
+    list of restaurant dictionaries of nearby restaurants
 '''
 def getNearbyRestaurants(lat,lng):
     rests = getAllRestaurants()
@@ -375,24 +436,70 @@ def getNearbyRestaurants(lat,lng):
     return srests
 
 '''
---------------------------------Miscellaneous----------------------------------
+________________________________Changing_______________________________________
 '''
 
 '''
-Gets the distance between two points
+Adds a restaurant to the database using information from the Yelp API
+Also adds the location, name, phone, and rating
 
 Args:
-    
+    yelpid: string id used by Yelp to identify a restaurant
     
 Returns:
+    none
+'''
+def addRestaurant(yelpid):
+    i = authy.get_business(yelpid)
+    restsc.insert({'_id':i['id'], 'name':i['name'], 'phone':i['phone'], 'address':[i['location']['address'][0],i['location']['city'],i['location']['state_code'],i['location']['postal_code'],i['location']['coordinate']], 'rating':i['rating']})
+
+'''
+-------------------------------------------------------------------------------
+--------------------------------Miscellaneous----------------------------------
+-------------------------------------------------------------------------------
+'''
+
+'''
+Encrypts a password using the hashlib library for python
+
+Args:
+    word: string to be encrypted
+
+Returns:
+    encrypted string
+'''
+def encrypt(word):
+    hashp = hashlib.md5()
+    hashp.update(word)
+    return hashp.hexdigest()
+
+'''
+Gets the distance between two points using the Google API
+
+Args:
+    o_lat: latitude coordinate of user
+    o_lng: longitude coordinate of user
+    d_lat: latitude coordinate of restaurant
+    d_lng: latitude coordinate of restaurant
     
+Returns:
+    Distance in meters
 '''
 def getDistance(o_lat, o_lng, d_lat, d_lng):
     url = 'https://maps.googleapis.com/maps/api/distancematrix/json?origins=%s,%s&destinations=%s,%s' % (o_lat, o_lng, d_lat, d_lng)
     result = simplejson.load(urllib2.urlopen(url))
-    #print result['rows'][0]
     return result['rows'][0]['elements'][0]['distance']['value']
 
+'''
+Gets the city and state name of a coordinate using the Google API
+
+Args:
+    o_lat: latitude of user
+    o_lng: longitude of user
+    
+Returns:
+    city and state
+'''
 def getCityState(o_lat, o_lng):
     url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=%s,%s' % (o_lat, o_lng)
     result = simplejson.load(urllib2.urlopen(url))
@@ -400,6 +507,11 @@ def getCityState(o_lat, o_lng):
     addr = addr[:addr.rfind(",")]
     return addr[:addr.rfind(" ")]
     #this format works for most u.s addresses
+
+
+
+
+
 
 #getDistance(40.60476,-73.95188,41.43206,-81.38992)
 
@@ -411,6 +523,14 @@ def getCityState(o_lat, o_lng):
 
 ##########Comments
 
+#addUser('hellopyk','my','friend')
+
 
 
 #print search('pizza ave')
+#print getAllPosts()
+#print getRestaurantPosts("dunkin-donuts-boston-24")
+#writePost("/path/",["hello","i","am","a","tag"],"nameoffood",3.14,"this is a nice pie", 2, "starbucks-brooklyn-39")
+#writePost("/path2/",["hello","i","am","another","tag"],"bestdrinkeva",6.28,"this is a nice frappuccino", 3, "starbucks-brooklyn-39")
+#writePost("/path3/",["hello","i","am","another","tag"],"coffeeman",3.28,"this is best coffee i rate 5/7", 3, "dunkin-donuts-boston-24")
+#writePost("/path4/",["hello","i","am","so many","tags"],"coffeewoman",3.28,"this is best coffee i rate 7/5", 3, "dunkin-donuts-boston-24")

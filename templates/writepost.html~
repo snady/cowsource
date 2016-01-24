@@ -28,7 +28,6 @@
       select: function( event, ui ) {
         $( "#restaurant" ).val( ui.item.label );
         $( "#restaurant-id" ).val( ui.item.id );
-	$( "#log" ).removeProp('disabled');
         return false;
       }
     })
@@ -75,7 +74,6 @@
 
     <form class="post-form pure-form pure-form-aligned" method = "POST">
     <fieldset>
-	<legend> Name, URL of picture, restaurant name, and price are required. Restaurants need to be registered on Yelp.</legend>
         <div class="pure-control-group">
             <label for="login">Name</label>
             <input name="name" type="text" placeholder="Food Name" required>
@@ -94,7 +92,6 @@
             <label for="restaurant">Restaurant</label>
             <input name="rest" type="text" placeholder="Restaurant" id="restaurant">
             <input type="hidden" id="restaurant-id" name="restid" required>
-
         </div>
 
         <div class="pure-control-group">
@@ -110,7 +107,7 @@
             <input name="tags" type="text" placeholder="Separate tags with ','">
         </div>
         <div class="pure-controls">
-            <button name="login" id="log" value="login" type="submit" class="pure-button pure-button-primary" disabled>Post</button>
+            <button name="login" value="login" type="submit" class="pure-button pure-button-primary">Post</button>
         </div>
     </div>
     <div class="pure-u-0 pure-u-lg-1-4"></div>
