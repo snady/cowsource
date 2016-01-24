@@ -17,6 +17,7 @@ def login():
                 all_rows[n] = all_rows[n]['name']
         print all_rows
         if request.method == 'POST':
+                print 'a'
                 error = ""
                 message = ""
                 print request.form
@@ -34,13 +35,17 @@ def login():
                                 error = "Incorrect Username or Password. Try Again."
                                 return render_template("index.html",error=error)            
                 if request.form.has_key('register'):
+                        print '1'
                         user = str(request.form['reguser'])
                         password = str(request.form['regpass'])
                         email = str(request.form['email'])
+                        print '2'
                         if user in all_rows:
+                                print '3'
                                 error = "Username already exists. Please try another"
                                 return render_template("index.html",regerror=error)
                         else:
+                                print '4'
                                 message = "Account Created!"
                                 mongoutils.addUser(user,password,email)
                                 session['user'] = user
@@ -146,6 +151,8 @@ def logout():
 
 @app.route("/home", methods = ['GET','POST'])
 def home():
+    if 'lati' not in session or 'longi' not in session:
+            return render_template("home.html")
     lati = session['lati']
     longi = session['longi']
     jason = mongoutils.getNearbyPosts(lati,longi)
@@ -184,7 +191,10 @@ def nearby():
 def about():
         return render_template("about.html")
 
-if __name__ == "__main__":
+if __name__ == '__main__':
         app.secret_key = "hello"
         app.debug = True
         app.run(host='0.0.0.0', port=8000)
+else:
+        app.secret_key = "hello"
+
