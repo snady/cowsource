@@ -248,13 +248,6 @@ def search(query):
             if post['yelpid'] == rest['_id']:
                 post['score'] += rest['score']
     return sorted(list(q), key = lambda k: k['score'], reverse=True)
-
-def getRestaurantName(yelpid):
-    try:
-        yelpname=getRestaurant(yelpid)['name']
-    except:
-        yelpname=''
-    return yelpname
                                                                                                            
 '''
 Gets the posts matching the yelpid

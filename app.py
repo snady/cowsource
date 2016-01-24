@@ -111,6 +111,7 @@ def showpost(idp):
         posty = mongoutils.getPost(idp)
         posty['uname'] = mongoutils.getUserName(posty['uid'])
         commy = mongoutils.getComments(idp)
+        print posty
         return render_template("post.html",posty=posty,commy=commy)
 
 
@@ -133,12 +134,30 @@ def showposts(limi=30):
         #print posts
         return render_template("posts.html",posts=posts,display_msg=display_msg)
 
+@app.route("/restaurant/<yelpid>", methods = ['GET'])
+def restaurant(yelpid):
+    error = ""
+    restaurant = []
+    if 'user' not in session:
+        return redirect("/login")
+    if mongoutils.getRestaurant(yelpid) == None:
+        return render_template("restaurant.html",error="Restaurant does not exist",restaurant=restaurant)
+    else:
+        restaurant = mongoutils.getRestaurant(yelpid)
+        rposts = mongoutils.getRestaurantPosts(yelpid)
+        print rposts
+        return render_template("restaurant.html",error="", restaurant=restaurant,rposts=rposts)
+
+
 @app.route("/user/<int:idu>")
 def user(idu):
         if 'user' not in session:
                 return redirect("/login")
         userposts = mongoutils.getUserPosts(idu)
         username = mongoutils.getUserName(idu)
+        print idu
+        print "USER POSTS: ",userposts
+        print "USER NAME: ",username
         return render_template("user.html",postsinrange=userposts,username=username)
                 
         

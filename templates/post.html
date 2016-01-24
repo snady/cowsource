@@ -52,7 +52,7 @@
     <div class="pure-u-0 pure-u-lg-1-4"></div>
     <div class="pure-u-1-2 pure-u-lg-1-4">
       <p><h1>{{posty['name']}}</h1> <i>from</i> 
-        <a style="font-size: 1em;" href="http://yelp.com/biz/{{posty['yelpid']}}">{{posty['yelpname']}}</a></p>
+        <a style="font-size: 1em;" href="{{url_for('restaurant', yelpid=posty['yelpid'])}}">{{posty['yelpname']}}</a></p>
     </div>
     <div class="pure-u-1-2 pure-u-lg-1-4 post-box">
       <p>Price: ${{posty['price']}}</p>
