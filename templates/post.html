@@ -19,21 +19,7 @@
     .post-img {
       padding-top: 1em;
     }
-    a:link {
-    text-decoration: none;
-    color: #22335f ;
-    }
-
-    a:visited {
-    text-decoration: none;
-    }
-
-    a:hover, a:active {
-    text-decoration: underline;
-    }
-    .post-box {
-      padding: 0.5em;
-    }
+    
 
     </style>
 </head>
@@ -46,6 +32,12 @@
             <li class="pure-menu-item"><a href="{{url_for('about')}}" class="pure-menu-link">About</a></li>
             <li class="pure-menu-item"><a href="{{url_for('makepost')}}" class="pure-menu-link">Make Post</a></li>
             <li class="pure-menu-item"><a href="{{url_for('showposts', limi=30)}}" class="pure-menu-link">Find New</a></li>
+            <form class="pure-form pure-menu-item">
+              <fieldset>
+                <input type="text" name="query" placeholder="Search by name or tags">
+                <button name="search" type="submit" class="pure-button pure-button-primary">Search</button>
+              </fieldset>
+            </form>
         </ul>
     </div>
     <div class="pure-g">

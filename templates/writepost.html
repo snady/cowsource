@@ -60,6 +60,12 @@
             <li class="pure-menu-item"><a href="{{url_for('about')}}" class="pure-menu-link">About</a></li>
             <li class="pure-menu-item"><a href="{{url_for('makepost')}}" class="pure-menu-link">Make Post</a></li>
             <li class="pure-menu-item"><a href="{{url_for('showposts', limi=30)}}" class="pure-menu-link">Find New</a></li>
+            <form class="pure-form pure-menu-item">
+              <fieldset>
+                <input type="text" name="query" placeholder="Search by name or tags">
+                <button name="search" type="submit" class="pure-button pure-button-primary">Search</button>
+              </fieldset>
+            </form>
         </ul>
     </div>
     <div class="pure-g">
@@ -90,7 +96,7 @@
 
         <div class="pure-control-group">
             <label for="login">Price</label>
-            <input name="price" type="text" placeholder="$$$cash money">
+            <input name="price" type="text" placeholder="e.g 10.00 or 10">
         </div>
         <div class="pure-control-group">
             <label for="login">Description</label>
@@ -106,16 +112,5 @@
     </div>
     <div class="pure-u-0 pure-u-lg-1-4"></div>
     </div>
-        <!--
-        <div class="pure-control-group">
-            <label for="email">Email Address</label>
-            <input id="email" type="email" placeholder="Email Address">
-        </div>
-
-        <div class="pure-control-group">
-            <label for="foo">Supercalifragilistic Label</label>
-            <input id="foo" type="text" placeholder="Enter something here...">
-        </div>
-        !-->
 </body>
 </html>

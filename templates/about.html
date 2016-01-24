@@ -12,9 +12,10 @@
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js">
     </script>
     <style>
-    .pure-img-responsive {
-    max-width: 100%;
-    height: 500px;
+    body {
+        background: transparent url('https://images.unsplash.com/photo-1446126102442-f6b2b73257fd?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&s=fdc200e9e5d9d25c2029b39701f15e2a') 0 0 no-repeat fixed;
+        background-size: cover;
+        filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://images.unsplash.com/photo-1446126102442-f6b2b73257fd?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&s=fdc200e9e5d9d25c2029b39701f15e2a', sizingMethod='scale');
     }
     </style>
 </head>
@@ -27,6 +28,12 @@
             <li class="pure-menu-item"><a href="{{url_for('about')}}" class="pure-menu-link">About</a></li>
             <li class="pure-menu-item"><a href="{{url_for('makepost')}}" class="pure-menu-link">Make Post</a></li>
             <li class="pure-menu-item"><a href="{{url_for('showposts', limi=30)}}" class="pure-menu-link">Find New</a></li>
+            <form class="pure-form pure-menu-item">
+              <fieldset>
+                <input type="text" name="query" placeholder="Search by name or tags">
+                <button name="search" type="submit" class="pure-button pure-button-primary">Search</button>
+              </fieldset>
+            </form>
         </ul>
     </div>
     <div class="pure-g">
@@ -39,10 +46,11 @@
     <div class="pure-g">
     <div class="pure-u-0 pure-u-lg-1-4"></div>
     <div class="pure-u-1 pure-u-lg-1-2">
-      <p> Cowsource is a collaborative food sharing platform.<br>
-	Anyone can post pictures of their food, taken from any restaurant found in Yelp.<br>
-	Developed by Sandy Fang, Katherine Gershfeld, and Dong Shin.
-	<a href="https://github.com/snady/cowsource">Github</a>
+      <p style="text-align: center;">
+        Cowsource is a collaborative food sharing platform.<br>
+	    Anyone can post pictures of their food, taken from any restaurant.<br>
+	    Developed by Sandy Fang, Katherine Gershfeld, and Dong Shin.
+	<a class="normal-link" href="https://github.com/snady/cowsource">Github</a>
     </div>
     <div classes="pure-u-0 pure-u-lg-1-4"></div>
     </div>

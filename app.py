@@ -18,7 +18,6 @@ def login():
         print all_rows
         if request.method == 'POST':
                 error = ""
-                message = ""
                 print request.form
                 if request.form['location'] != '':
                     session['lati'] = json.loads(request.form['location'])['latitude']
@@ -28,8 +27,7 @@ def login():
                         password = str(request.form['pass'])
                         if mongoutils.authenticate(user,password):
                                 session['user'] = user
-                                message = "You are now logged in!"
-                                return redirect(url_for('showposts', limi = 30))
+                                return redirect("/home")
                         else:
                                 error = "Incorrect Username or Password. Try Again."
                                 return render_template("index.html",error=error)            
@@ -41,10 +39,9 @@ def login():
                                 error = "Username already exists. Please try another"
                                 return render_template("index.html",regerror=error)
                         else:
-                                message = "Account Created!"
                                 mongoutils.addUser(user,password,email)
                                 session['user'] = user
-                                return render_template("home.html",message=message)
+                                return redirect("/home")
         return render_template("index.html") #login failed
 
 @app.route('/like')
@@ -114,7 +111,7 @@ def showpost(idp):
 #shows newest limi number of posts
 @app.route("/posts/", methods = ['GET', 'POST'])
 @app.route("/posts/<int:limi>", methods = ['GET', 'POST'])
-def showposts(limi=30,start=None):
+def showposts(limi=30):
         display_msg  = ""
         if 'user' not in session:
                 return redirect("/login")
@@ -159,7 +156,9 @@ def home():
 @app.route("/autocomplete")
 def autocomplete():
 	name = request.args.get('term')
-    	location = 'ny'
+    	location = mongoutils.getCityState(session['lati'],session['longi'])
+        location = location.replace(',','')
+        print location
     	dic = authy.search(name,location,7)
     	#print dic
     	cleaned = []
