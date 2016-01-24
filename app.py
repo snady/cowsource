@@ -107,7 +107,7 @@ def showpost(idp):
                 return redirect("/login")
         if request.method == 'POST':
                 content = request.form['content']
-                addComment(mongoutils.getUserId(session['user'],idp,content)
+                mongoutils.addComment(mongoutils.getUserId(session['user'],idp,content))
         posty = mongoutils.getPost(idp)
         posty['uname'] = mongoutils.getUserName(posty['uid'])
         commy = mongoutils.getComments(idp)
