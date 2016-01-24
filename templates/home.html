@@ -1,26 +1,12 @@
 <!doctype html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% extends "base.html" %}
 
-    <title>Home</title>
+{% block title%}
+Home
+{% endblock %}
 
-    <link href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css" rel="stylesheet" >
-    <link href="{{url_for('static', filename='pure.css')}}" rel="stylesheet" >
-    <style>
-    /*
-	.crop {
-    width: 200px;
-    height: 250px;
-    overflow: hidden;
-	}
-	.crop img {
-    width: 400px;
-    height: 300px;
-    margin: 0 0 0 0px;
-	}
-	*/
+{% block style %}
+<style>
 	.pure-img-responsive {
     max-width: 100%;
     height: 300px;
@@ -28,27 +14,10 @@
 	.padded {
 	padding: 50px;
 	}
-	</style>
-	<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-</head>
+</style>
+{% endblock %}
 
-<body>
-    <div class="home-menu pure-menu pure-menu-horizontal">
-        <a href="{{url_for('showposts')}}" class="pure-menu-heading">cowsource</a>
-        <ul class="pure-menu-list">
-            <li class="pure-menu-item"><a href="" class="pure-menu-link">Home</a></li> <!-- disabled home button on home for hotfix !-->
-            <li class="pure-menu-item"><a href="{{url_for('about')}}" class="pure-menu-link">About</a></li>
-            <li class="pure-menu-item"><a href="{{url_for('makepost')}}" class="pure-menu-link">Make Post</a></li>
-            <li class="pure-menu-item"><a href="{{url_for('showposts',limi=30)}}" class="pure-menu-link">Find New</a></li>
-            <form class="pure-form pure-menu-item">
-              <fieldset>
-                <input type="text" name="query" placeholder="Search by name or tags">
-                <button name="search" type="submit" class="pure-button pure-button-primary">Search</button>
-              </fieldset>
-            </form>
-        </ul>
-    </div>
-
+{% block body %}
     <div class="pure-g">
     	<div class="pure-u-1-3" align="center">
     		<h1>Near you in {{location}}</h1>
@@ -91,73 +60,4 @@
 	</div>
 	{% endif %}
 
-	<!--
-
-    <div class="l-content">
-    <div class="pricing-tables pure-g">
-        <div class="pure-u-1-4">
-            <div class="pricing-table pricing-table-free">
-            		<tr>
-            			<td>	
-            				<img class="pure-img-responsive" src="https://i.imgur.com/rKRJ0aW.jpg">
-            			</td>
-            		</tr>
-            		<tr>
-            			<td>
-            				<p>Cat</p>
-            			</td>
-            		</tr>
-            </div>
-        </div>
-        <div class="pure-u-1-4">
-            <div class="pricing-table pricing-table-free">
-            		<tr>
-            			<td>	
-            				<img class="pure-img-responsive" src="https://i.imgur.com/IDdzt2d.jpg">
-            			</td>
-            		</tr>
-            		<tr>
-            			<td>
-            				<p>Another Cat</p>
-            			</td>
-            		</tr>
-            </div>
-        </div>
-    </div>
-        <div class="pricing-tables pure-g">
-        <div class="pure-u-1-4">
-            <div class="pricing-table pricing-table-free">
-            		<tr>
-            			<td>	
-            				<img class="pure-img-responsive" src="https://i.imgur.com/rKRJ0aW.jpg">
-            			</td>
-            		</tr>
-            		<tr>
-            			<td>
-            				<p>Cat</p>
-            			</td>
-            		</tr>
-            </div>
-        </div>
-        <div class="pure-u-1-4">
-            <div class="pricing-table pricing-table-free">
-            		<tr>
-            			<td>	
-            				<img class="pure-img-responsive" src="https://i.imgur.com/IDdzt2d.jpg">
-            			</td>
-            		</tr>
-            		<tr>
-            			<td>
-            				<p>Another Cat</p>
-            			</td>
-            		</tr>
-            </div>
-        </div>
-    </div>
-
-	</div>
-
-	!-->
-
-</body>
-</html>
+{% endblock %}

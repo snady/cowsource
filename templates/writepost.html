@@ -1,15 +1,10 @@
 <!doctype html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% extends "base.html" %}
+{% block title %}
+Write Post
+{% endblock %}
 
-    <title>Write Post</title>
-
-    <link href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css" rel="stylesheet" >
-    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/grids-responsive-min.css">
-    <link href="{{url_for('static', filename='pure.css')}}" rel="stylesheet" >
-    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+{% block script %}
   <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
   <script>
   console.log({{request.script_root}})
@@ -43,39 +38,26 @@
     };
   });
   </script>
-  <style>
+{% endblock %}
+
+{% block style %}
+<style>
   .ui-autocomplete .ui-menu-item{
     background: #ffffff;
     padding: 5px;
     border: 1px;
 }
-  
-  </style>
-</head>
+</style>
+{% endblock %}
 
-<body>
-    <div class="home-menu pure-menu pure-menu-horizontal">
-        <a href="{{url_for('showposts')}}" class="pure-menu-heading">cowsource</a>
-        <ul class="pure-menu-list">
-            <li class="pure-menu-item"><a href="{{url_for('home')}}" class="pure-menu-link">Home</a></li>
-            <li class="pure-menu-item"><a href="{{url_for('about')}}" class="pure-menu-link">About</a></li>
-            <li class="pure-menu-item"><a href="{{url_for('makepost')}}" class="pure-menu-link">Make Post</a></li>
-            <li class="pure-menu-item"><a href="{{url_for('showposts', limi=30)}}" class="pure-menu-link">Find New</a></li>
-            <form class="pure-form pure-menu-item">
-              <fieldset>
-                <input type="text" name="query" placeholder="Search by name or tags">
-                <button name="search" type="submit" class="pure-button pure-button-primary">Search</button>
-              </fieldset>
-            </form>
-        </ul>
-    </div>
+{% block body %}
     <div class="pure-g">
     <div class="pure-u-0 pure-u-lg-1-4"></div>
     <div class="pure-u-1 pure-u-lg-1-2">
 
     <form class="post-form pure-form pure-form-aligned" method = "POST">
     <fieldset>
-	<legend> Name, URL of picture, restaurant name, and price are required. Restaurants need to be registered on Yelp.</legend>
+	<legend><p style="text-align: center;"> Name, URL of picture, restaurant name, and price are required. Restaurants need to be registered on Yelp. </p></legend>
         <div class="pure-control-group">
             <label for="login">Name</label>
             <input name="name" type="text" placeholder="Food Name" required>
@@ -84,12 +66,7 @@
             <label for="name">URL</label>
             <input name="path" type="text" placeholder="URL of image" required>
         </div>
-        <!--
-        <div class="pure-control-group">
-            <label for="password">Restaurant</label>
-            <input name="rest" type="text" placeholder="Restaurant">
-        </div>
-        !-->
+
         <div class="pure-control-group" id="restaurant-label">
             <label for="restaurant">Restaurant</label>
             <input name="rest" type="text" placeholder="Restaurant" id="restaurant">
@@ -110,10 +87,9 @@
             <input name="tags" type="text" placeholder="Separate tags with ','">
         </div>
         <div class="pure-controls">
-            <button name="login" id="log" value="login" type="submit" class="pure-button pure-button-primary" disabled>Post</button>
+            <button name="login" id="log" value="login" type="submit" class="pure-button pure-button-primary">Post</button>
         </div>
     </div>
     <div class="pure-u-0 pure-u-lg-1-4"></div>
     </div>
-</body>
-</html>
+{% endblock %}

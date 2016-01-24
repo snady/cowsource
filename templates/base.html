@@ -1,0 +1,33 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% block title %}{% endblock %}</title>
+
+    <link href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css" rel="stylesheet" >
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/grids-responsive-min.css">
+    <link href="{{url_for('static', filename='pure.css')}}" rel="stylesheet" >
+    {% block style %}{% endblock %}
+    <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    {% block script %}{% endblock %}
+</head>
+<body>
+<div class="home-menu pure-menu pure-menu-horizontal">
+        <a href="{{url_for('showposts')}}" class="pure-menu-heading cow-link">cowsource</a>
+        <ul class="pure-menu-list">
+            <li class="pure-menu-item"><a href="{{url_for('home')}}" class="pure-menu-link cow-link">Home</a></li>
+            <li class="pure-menu-item"><a href="{{url_for('about')}}" class="pure-menu-link cow-link">About</a></li>
+            <li class="pure-menu-item"><a href="{{url_for('makepost')}}" class="pure-menu-link cow-link">Make Post</a></li>
+            <li class="pure-menu-item"><a href="{{url_for('showposts',limi=30)}}" class="pure-menu-link cow-link">Find New</a></li>
+            <form class="pure-form pure-menu-item">
+              <fieldset>
+                <input type="text" name="query" placeholder="Search by name or tags">
+                <button name="search" type="submit" class="pure-button pure-button-primary">Search</button>
+              </fieldset>
+            </form>
+        </ul>
+</div>
+{% block body %}{% endblock %} <!-- jensen body these fools !-->
+</body>
+</html>

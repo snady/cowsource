@@ -6,10 +6,8 @@ body {
     color: #526066;
 }
 
-h2, h3 {
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    font-weight: 600;
+h1 {
+    color: #3D3A3A;
 }
 
 p {
@@ -91,7 +89,12 @@ a:hover .normal-link, a:active .normal-link{
 }
 
 .home-menu {
+    background-color: #3D3A3A;
     padding: 0.5em;
+}
+
+.cow-link{
+    color: white;
 }
 
 .post-form{
@@ -116,8 +119,10 @@ a:hover .normal-link, a:active .normal-link{
  * Every pricing table has the .pricing-table class
  */
 .pricing-table {
+    background-color: #3D3A3A;
     border: 1px solid #ddd;
     padding: 0.5em;
+    color: white;
     /*margin: 0 0.5em 2em;
     padding: 0 0 3em;
     */
