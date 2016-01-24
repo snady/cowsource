@@ -61,9 +61,21 @@ def getRestaurant(limit=5):
 
 @app.route('/like')
 def like():
-        idu = request.args.get('idu')
-        idp = request.args.get('idp')
-        mongoutils.likePost(idu,idp)
+        idu = request.args.get('idu',0,type = int)
+        idp = request.args.get('idp',0,type = int)
+        likes = {}
+        likes['likes'] = len(mongoutils.likePost(idu,idp))
+        return json.dumps(likes)
+
+@app.route('/see')
+def see():
+        idp = request.args.get('idp',0,type = int)
+        likes = {}
+        likes['people']=[]
+        for i in mongoutils.getPost(idp)['likes']:
+                likes['people'].append([i,mongoutils.getUserName(i)['name']])
+        print json.dumps(likes)
+        return json.dumps(likes)
 
 @app.route("/makepost", methods = ['GET','POST'])
 def makepost():
@@ -86,17 +98,24 @@ def makepost():
         else:
                 return render_template("writepost.html")
 
-@app.route("/post/<int:idp>")
+@app.route("/post/<int:idp>", methods = ['GET','POST'])
 def showpost(idp):
         if 'user' not in session:
                 return redirect("/login")
+        if request.method == 'POST':
+                content = request.form['content']
+                addComment(mongoutils.getUserId(session['user'],idp,content)
         posty = mongoutils.getPost(idp)
-        return render_template("post.html",posty=posty)
+        posty['uname'] = mongoutils.getUserName(posty['uid'])
+        commy = mongoutils.getComments(idp)
+        return render_template("post.html",posty=posty,commy=commy)
 
 
 #shows newest limi number of posts
+@app.route("/posts/", methods = ['GET', 'POST'])
 @app.route("/posts/<int:limi>", methods = ['GET', 'POST'])
-def showposts(limi=30):
+@app.route("/posts/<int:start>/<int:limi>", methods = ['GET', 'POST'])
+def showposts(limi=30,start=None):
         if 'user' not in session:
                 return redirect("/login")
         if 'search' in request.args:
@@ -106,7 +125,9 @@ def showposts(limi=30):
                 posts = mongoutils.getAllPosts()
         postsinrange = [[],[],[],[],[]]
         i = 0
-        for post in posts[-1:-limi-1:-1]:
+        if start==None:
+                start = 1
+        for post in posts[-start:-limi-start:-1]:
                 postsinrange[i%5].append(post)
                 i += 1
         return render_template("posts.html",postsinrange=postsinrange)
@@ -117,7 +138,12 @@ def user(idu):
                 return redirect("/login")
         userposts = mongoutils.getUserPosts(idu)
         username = mongoutils.getUserName(idu)
-        return render_template("user.html",userposts=userposts,username=username)
+        postsinrange = [[],[],[],[],[]]
+        i = 0
+        for post in userposts[-1::-1]:
+                postsinrange[i%5].append(post)
+                i += 1
+        return render_template("user.html",postsinrange=postsinrange,username=username)
                 
         
 @app.route("/logout")
