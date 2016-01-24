@@ -113,8 +113,6 @@ def showpost(idp):
                         content = request.form['texty']
                         mongoutils.addComment(mongoutils.getUserId(session['user']),idp,content,datetime.now())
         posty = mongoutils.getPost(idp)
-	if 'error' in posty:
-		return render_template("post.html",posty=posty)
         posty['uname'] = mongoutils.getUserName(posty['uid'])
         commy = mongoutils.getComments(idp)
         print posty
