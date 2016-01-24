@@ -157,7 +157,7 @@ Returns:
 def getUserPosts(idu):
     posts = list(postsc.find({'uid':idu}))
     for p in posts:
-        p['restaurant']=getRestaurantName(p['yelpid'])
+        p['yelpname']=getRestaurantName(p['yelpid'])
     return posts
 
 
