@@ -8,6 +8,7 @@ db = connection['database']
 usersc = db.users
 postsc = db.posts
 restsc = db.rests
+commsc = db.comms
 
 '''
 --------------------------------Users------------------------------------------
@@ -159,18 +160,21 @@ def getUserPosts(idu):
         p['yelpname']=getRestaurantName(p['yelpid'])
     return posts
 
-'''
+
 def likePost(idu,idp):
-    p = postsc.find_one({'_id:':idp})
+    p = postsc.find_one({'_id':idp})
     if not liked(idu,idp):
         p['likes'].append(idu)
     else:
         p['likes'].remove(idu)
+    postsc.update_one({'_id':idp},{'$set':{'likes':p['likes']}})
+    return p['likes']
 
 def liked(idu,idp):
-    p = postsc.find_one({'_id:':idp})
-    return idu in p['likes']
-'''
+    p = postsc.find_one({'_id':idp})
+    print p
+    return (idu in p['likes'])
+
 
 '''
 Adds a restaurant to the database using information from the Yelp API
@@ -286,6 +290,21 @@ def getNearbyPosts(lat,lng):
 #writePost("/path4/",["hello","i","am","so many","tags"],"coffeewoman",3.28,"this is best coffee i rate 7/5", 3, "dunkin-donuts-boston-24")
 
 '''
+--------------------------------Comments---------------------------------------
+'''
+def addComment(idu,idp,content):
+    idc = len(list(commsc.find()))+1
+    commsc.insert({'_id':idc,'uid':idu,'pid':idp,'content':content,
+                   '$currentDate': {'time': {'$type':'timestamp'} } })
+    
+def removeComment(idc):
+    commsc.remove({'_id':idc})
+
+def getComments(idp):
+    return list(commsc.find({'pid':idp}))
+
+
+'''
 --------------------------------Restaurants------------------------------------
 '''
 
@@ -384,5 +403,7 @@ def getCityState(o_lat, o_lng):
 #print getCityState(42.376765, -71.116724)
 
 ##########Comments
+
+
 
 #print search('pizza ave')
