@@ -96,6 +96,10 @@ a:hover .normal-link, a:active .normal-link{
 .cow-link{
     color: white;
 }
+.cow-button{
+    background-color: #c53737;
+    color: white;
+}
 
 .post-form{
     padding: 0.5em;

@@ -43,13 +43,13 @@ View Post
     <div class="pure-g">
       <div class="pure-u-0 pure-u-lg-1-4"></div>
       <div class="pure-u-1-2 pure-u-lg-1-4">
-      <button id="like_button" onclick="like()" class="pure-button pure-button-primary">Like</button>
+      <button id="like_button" onclick="like()" class="pure-button pure-button-primary cow-button">Like</button>
       {% if posty['likes']|length == 1 %} 
       <p id="likes">1 like</p>
       {% else %}
       <p id="likes">{{posty['likes']|length}} likes</p>
       {% endif %}
-      <button onclick="see()" class="pure-button pure-button-primary">See who liked this</button>
+      <button onclick="see()" class="pure-button pure-button-primary cow-button">See who liked this</button>
       <p id="see"></p>
       </div>
       <div class="pure-u-1-2 pure-u-lg-1-4 post-box">
@@ -83,7 +83,7 @@ View Post
       {% if session['user'] == comment['name']['name'] %}
     <form class="pure-form" method="POST">
 	<fieldset>
-        <button type="submit" name="removec" value="{{comment['_id']}}" class="pure-button pure-button-primary">Remove</button>
+        <button type="submit" name="removec" value="{{comment['_id']}}" class="pure-button pure-button-primary cow-button">Remove</button>
     </fieldset></form> {% endif %}
     {% endfor %}
     </div>
@@ -96,17 +96,24 @@ View Post
 	<fieldset>
           <legend>Type your comment</legend>
           <input type="textarea" name="texty" placeholder="">
-        <button type="submit" class="pure-button pure-button-primary">Submit</button>
+        <button type="submit" class="pure-button pure-button-primary cow-button">Submit</button>
     </fieldset>
       </form></div>
-      <div class="pure-u-0 pure-u-lg-1-4"></div></div>
-</div><div class="pure-u-g"><div class="pure-u-0 pure-lg-1-4"></div>
-  <div class="pure-u-1 pure-lg-1-2">
+      <div class="pure-u-0 pure-u-lg-1-4"></div>
+    </div>
+  <div class="pure-u-g">
+  <div class="pure-u-0 pure-lg-1-4"></div>
+  <div class="pure-u-1 pure-lg-1-2" align="center">
   {% if session['user'] == posty['uname']['name'] %}
     <form class="pure-form" method="POST">
 	<fieldset>
-        <button type="submit" name="remove" value="" class="pure-button pure-button-primary">Remove</button>
-    </fieldset></form> {% endif %}</div><div class="pure-u-0 pure-u-1-4"></div></div>
+        <button type="submit" name="remove" value="" class="pure-button pure-button-primary cow-button">Delete Post</button>
+    </fieldset>
+  </form> 
+    {% endif %}
+  </div>
+  <div class="pure-u-0 pure-u-1-4"></div>
+  </div>
 	<script>
 	  $SCRIPT_ROOT = {{request.script_root|tojson|safe}};
 	  
@@ -139,4 +146,5 @@ View Post
 			}
 			})}
 	  </script>
+    {%endif%}
 {%endblock%}
