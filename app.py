@@ -98,11 +98,15 @@ def showpost(idp):
 
 
 #shows newest limi number of posts
-@app.route("/posts/<int:limi>")
-def showposts(limi):
+@app.route("/posts/<int:limi>", methods = ['GET', 'POST'])
+def showposts(limi=30):
         if 'user' not in session:
                 return redirect("/login")
-        posts = mongoutils.getAllPosts()
+        if 'search' in request.args:
+                print request.args['query']
+                posts = mongoutils.search(request.args['query'])
+        else:
+                posts = mongoutils.getAllPosts()
         postsinrange = [[],[],[],[],[]]
         i = 0
         for post in posts[-1:-limi-1:-1]:
