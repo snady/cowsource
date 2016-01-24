@@ -30,51 +30,22 @@
 	}
 	</style>
 	<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-	<script>
-	function geoLocate() {
-
-  if (!navigator.geolocation){
-    console.log("Geolocation is not supported by your browser");
-    return;
-  }
-
-  function success(position) {
-    var latitude  = position.coords.latitude;
-    var longitude = position.coords.longitude;
-
-    console.log('Latitude is ' + latitude + ' <br>Longitude is ' + longitude);
-    //ajax send to python
-    $.ajax({
-    	type: 'POST',
-    	url: '/home',
-    	dataType: 'json',
-    	data: JSON.stringify({latitude: latitude, longitude: longitude}),
-    	contentType: 'application/json;charset=UTF-8'
-    });
-  };
-
-  function error() {
-    console.log("Unable to retrieve your location");
-  };
-
-  console.log("Locating...");
-
-  navigator.geolocation.getCurrentPosition(success, error);
-
-};
-
-geoLocate()
-</script>
 </head>
 
 <body>
     <div class="home-menu pure-menu pure-menu-horizontal">
         <a href="{{url_for('showposts')}}" class="pure-menu-heading">cowsource</a>
         <ul class="pure-menu-list">
-            <li class="pure-menu-item"><a href="{{url_for('home')}}" class="pure-menu-link">Home</a></li>
+            <li class="pure-menu-item"><a href="" class="pure-menu-link">Home</a></li> <!-- disabled home button on home for hotfix !-->
             <li class="pure-menu-item"><a href="{{url_for('about')}}" class="pure-menu-link">About</a></li>
             <li class="pure-menu-item"><a href="{{url_for('makepost')}}" class="pure-menu-link">Make Post</a></li>
             <li class="pure-menu-item"><a href="{{url_for('showposts',limi=30)}}" class="pure-menu-link">Find New</a></li>
+            <form class="pure-form pure-menu-item">
+              <fieldset>
+                <input type="text" name="query" placeholder="Search by name or tags">
+                <button name="search" type="submit" class="pure-button pure-button-primary">Search</button>
+              </fieldset>
+            </form>
         </ul>
     </div>
 

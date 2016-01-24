@@ -19,6 +19,25 @@ p {
 /*
  * -- Layout Styles --
  */
+
+.normal-link {
+    text-decoration: none;
+    color: #456F96 ;
+}
+
+a:visited .normal-link {
+    text-decoration: none;
+}
+
+a:hover .normal-link, a:active .normal-link{
+    text-decoration: underline;
+}
+
+.post-box {
+    padding: 0.5em;
+}
+
+
 .l-content {
     margin: 0 auto;
     border: 1px;
