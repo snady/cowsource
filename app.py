@@ -1,5 +1,6 @@
 from flask import Flask, render_template, session, request
 from flask import redirect, url_for
+from datetime import datetime
 '''from pymongo import MongoClient
 import utils'''
 import mongoutils
@@ -46,24 +47,10 @@ def login():
                                 return render_template("home.html",message=message)
         return render_template("index.html") #login failed
 
-@app.route("/getrest")
-def getRestaurant(limit=5):
-    name = request.args.get('name')
-    location = request.args.get('location')
-    dic = authy.search(name,location,limit)
-    print dic
-    cleaned = []
-    for i in dic['businesses']:
-        a={}
-        a['id']=i['id']
-        a['name']=i['name']
-        a['address']=[i['location']['address'][0],i['location']['city'],i['location']['state_code'],i['location']['postal_code'],i['location']['coordinate']]
-        cleaned.append(a)
-    return cleaned
-    #address format = [street address, city, state, zip code]
-
 @app.route('/like')
 def like():
+        if 'idu' not in request.args:
+                return 'illegal access'
         idu = request.args.get('idu',0,type = int)
         idp = request.args.get('idp',0,type = int)
         likes = {}
@@ -72,6 +59,8 @@ def like():
 
 @app.route('/see')
 def see():
+        if 'idp' not in request.args:
+                return 'illegal access'
         idp = request.args.get('idp',0,type = int)
         likes = {}
         likes['people']=[]
@@ -106,8 +95,8 @@ def showpost(idp):
         if 'user' not in session:
                 return redirect("/login")
         if request.method == 'POST':
-                content = request.form['content']
-                mongoutils.addComment(mongoutils.getUserId(session['user'],idp,content))
+                content = request.form['texty']
+                mongoutils.addComment(mongoutils.getUserId(session['user']),idp,content,datetime.now())
         posty = mongoutils.getPost(idp)
         posty['uname'] = mongoutils.getUserName(posty['uid'])
         commy = mongoutils.getComments(idp)

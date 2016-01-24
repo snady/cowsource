@@ -292,16 +292,19 @@ def getNearbyPosts(lat,lng):
 '''
 --------------------------------Comments---------------------------------------
 '''
-def addComment(idu,idp,content):
+def addComment(idu,idp,content,time):
     idc = len(list(commsc.find()))+1
     commsc.insert({'_id':idc,'uid':idu,'pid':idp,'content':content,
-                   '$currentDate': {'time': {'$type':'timestamp'} } })
+                    'time': time  })
     
 def removeComment(idc):
     commsc.remove({'_id':idc})
 
 def getComments(idp):
-    return list(commsc.find({'pid':idp}))
+    commy = list(commsc.find({'pid':idp}))
+    for c in commy:
+        c['name'] = getUserName(c['uid'])
+    return commy
 
 
 '''
