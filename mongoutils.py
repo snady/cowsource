@@ -11,29 +11,21 @@ restsc = db.rests
 commsc = db.comms
 
 '''
+-------------------------------------------------------------------------------
 --------------------------------Users------------------------------------------
+-------------------------------------------------------------------------------
 '''
 
 '''
-Encrypts a password using the hashlib library for python
-
-Args:
-    word: string to be encrypted
-
-Returns:
-    encrypted string
+________________________________Login__________________________________________
 '''
-def encrypt(word):
-    hashp = hashlib.md5()
-    hashp.update(word)
-    return hashp.hexdigest()
 
 '''
-Checks whether the username
+Checks whether the username and password match a registered user 
  
 Args:
-    username: string username to be checked
-    password: string password to be checked    
+    username: username to be checked
+    password: password to be checked    
     
 Returns:
     True if both match
@@ -50,7 +42,7 @@ def authenticate(username,password):
 Gets the id that corresponds to a username
 
 Args:
-    username: string username
+    username: username
     
 Returns:
     corresponding user id
@@ -85,6 +77,10 @@ def getAllUsers():
     return list(usersc.find())
 
 '''
+________________________________Changing_______________________________________
+'''
+
+'''
 Registers a user into the database
 
 Args:
@@ -111,7 +107,13 @@ def addUser(username,password,email):
     return False
                 
 '''
+-------------------------------------------------------------------------------
 --------------------------------Posts------------------------------------------
+-------------------------------------------------------------------------------
+'''
+
+'''
+________________________________Getting________________________________________
 '''
 
 '''
@@ -159,6 +161,76 @@ def getUserPosts(idu):
     return posts
 
 '''
+Gets the posts matching the yelpid
+
+Args:
+    yelpid: the yelpid to look for
+    
+Returns:
+    dictionary of post info if one is found
+    None otherwise
+'''
+def getRestaurantPosts(yelpid):
+    return list(postsc.find({'yelpid':yelpid}))
+
+'''
+________________________________Changing_______________________________________
+'''
+
+
+'''
+Adds a post to the database, adds the restaurant with addRestaurant()
+
+Args:
+    path: path to the image file
+    tags: array of tags
+    name: name of the food
+    price: price of the food
+    description: description of the food
+    idu: user id
+    idy: restaurant's yelp ID
+    
+Returns:
+    none
+''' 
+def writePost(path, tags, name, price, description, idu, idy):
+    ps = getAllPosts()
+    print ps
+    if len(ps)==0:
+        idp = 1
+    else:
+        idp = ps[-1]['_id']+1
+    tags = tags.split(',')
+    tags2 = []
+    for tag in tags:
+        tag = tag.strip().lower()
+        tags2.append(tag)
+    r = {'_id':idp, 'tags':tags2, 'likes':[], 'name':name, 'price':price, 
+         'description':description, 'file':path, 'uid':idu, 'yelpid':idy}
+    postsc.insert(r)
+    if restsc.find_one({'_id':idy}) == None:
+        addRestaurant(idy)
+        print "need restaurant"
+    return idp
+
+'''
+Gets the distance between two points
+
+Args:
+    
+    
+Returns:
+    
+'''
+
+def removePost(idp):
+    postsc.remove({'_id':idp})
+
+'''
+________________________________Liking_________________________________________
+'''
+
+'''
 Gets the distance between two points
 
 Args:
@@ -190,52 +262,9 @@ def liked(idu,idp):
     print p
     return (idu in p['likes'])
 
-
 '''
-Adds a post to the database, adds the restaurant with addRestaurant()
-
-Args:
-    path: path to the image file
-    tags: array of tags
-    name: name of the food
-    price: price of the food
-    description: description of the food
-    idu: user id
-    idy: restaurant's yelp ID
-    
-Returns:
-    none
-''' 
-def writePost(path, tags, name, price, description, idu, idy):
-    ps = getAllPosts()
-    print ps
-    if len(ps)==0:
-        idp = 1
-    else:
-        idp = ps[-1]['_id']+1
-    tags = tags.split(',')
-    tags2 = []
-    for tag in tags:
-        tag = tag.strip().lower()
-        tags2.append(tag)
-    r = {'_id':idp, 'tags':tags2, 'likes':[], 'name':name, 'price':price, 'description':description, 'file':path, 'uid':idu, 'yelpid':idy}
-    postsc.insert(r)
-    if restsc.find_one({'_id':idy}) == None:
-        addRestaurant(idy)
-        print "need restaurant"
-    return idp
-
+________________________________Searching______________________________________
 '''
-Gets the distance between two points
-
-Args:
-    
-    
-Returns:
-    
-'''
-def removePost(idp):
-    postsc.remove({'_id':idp})
 
 '''
 Looks through posts to find matching tags, names, or location
@@ -251,27 +280,17 @@ def search(query):
     result = {}
     postsc.create_index([('tags',pymongo.TEXT),('name',pymongo.TEXT)])
     restsc.create_index([('address',pymongo.TEXT),('name',pymongo.TEXT)])
-    r = list(restsc.find({'$text': {'$search': query}}, {'score':{'$meta': "textScore"}}).sort([('score',{'$meta':"textScore"})]))
-    q = list(postsc.find({'$text': {'$search': query}}, {'score':{'$meta': "textScore"}}).sort([('score',{'$meta':"textScore"})]))
+    r = list(restsc.find({'$text': {'$search': query}}, 
+                         {'score':{'$meta': "textScore"}}).sort(
+                             [('score',{'$meta':"textScore"})]))
+    q = list(postsc.find({'$text': {'$search': query}}, 
+                         {'score':{'$meta': "textScore"}}).sort(
+                             [('score',{'$meta':"textScore"})]))
     for rest in r:
         for post in q:
             if post['yelpid'] == rest['_id']:
                 post['score'] += rest['score']
     return sorted(list(q), key = lambda k: k['score'], reverse=True)
-
-
-'''
-Gets the posts matching the yelpid
-
-Args:
-    yelpid: the yelpid to look for
-    
-Returns:
-    dictionary of post info if one is found
-    None otherwise
-'''
-def getRestaurantPosts(yelpid):
-    return list(postsc.find({'yelpid':yelpid}))
 
 '''
 Gets the restaurant matching the yelpid
@@ -291,7 +310,9 @@ def getNearbyPosts(lat,lng):
     return result
 
 '''
+-------------------------------------------------------------------------------
 --------------------------------Comments---------------------------------------
+-------------------------------------------------------------------------------
 '''
 
 '''
@@ -337,23 +358,14 @@ def getComments(idp):
 
 
 '''
+-------------------------------------------------------------------------------
 --------------------------------Restaurants------------------------------------
+-------------------------------------------------------------------------------
 '''
 
 '''
-Adds a restaurant to the database using information from the Yelp API
-
-Args:
-    yelpid: string id used by Yelp to identify a restaurant
-    
-Returns:
-    none
+________________________________Getting________________________________________
 '''
-def addRestaurant(yelpid):
-    i = authy.get_business(yelpid)
-    restsc.insert({'_id':i['id'], 'name':i['name'], 'phone':i['phone'], 'address':[i['location']['address'][0],i['location']['city'],i['location']['state_code'],i['location']['postal_code'],i['location']['coordinate']], 'rating':i['rating']})
-
-
 
 '''
 Gets the restaurant matching the yelpid
@@ -430,10 +442,45 @@ def getRestaurantName(yelpid):
         yelpname=getRestaurant(yelpid)['name']
     except:
         yelpname=''
-    return yelpname                                                                                                           
+    return yelpname                              
+
 '''
+________________________________Changing_______________________________________
+'''
+
+
+'''
+Adds a restaurant to the database using information from the Yelp API
+
+Args:
+    yelpid: string id used by Yelp to identify a restaurant
+    
+Returns:
+    none
+'''
+def addRestaurant(yelpid):
+    i = authy.get_business(yelpid)
+    restsc.insert({'_id':i['id'], 'name':i['name'], 'phone':i['phone'], 'address':[i['location']['address'][0],i['location']['city'],i['location']['state_code'],i['location']['postal_code'],i['location']['coordinate']], 'rating':i['rating']})
+
+'''
+-------------------------------------------------------------------------------
 --------------------------------Miscellaneous----------------------------------
+-------------------------------------------------------------------------------
 '''
+
+'''
+Encrypts a password using the hashlib library for python
+
+Args:
+    word: string to be encrypted
+
+Returns:
+    encrypted string
+'''
+def encrypt(word):
+    hashp = hashlib.md5()
+    hashp.update(word)
+    return hashp.hexdigest()
 
 '''
 Gets the distance between two points
@@ -447,7 +494,6 @@ Returns:
 def getDistance(o_lat, o_lng, d_lat, d_lng):
     url = 'https://maps.googleapis.com/maps/api/distancematrix/json?origins=%s,%s&destinations=%s,%s' % (o_lat, o_lng, d_lat, d_lng)
     result = simplejson.load(urllib2.urlopen(url))
-    #print result['rows'][0]
     return result['rows'][0]['elements'][0]['distance']['value']
 
 '''
