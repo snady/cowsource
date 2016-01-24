@@ -17,7 +17,7 @@ function geoLocate() {
     //ajax send to python
     $.ajax({
     	type: 'POST',
-    	url: '/location',
+    	url: '/home',
     	data: JSON.stringify({latitude: latitude, longitude: longitude}),
     	contentType: 'application/json;charset=UTF-8'
     });

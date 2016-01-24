@@ -377,6 +377,6 @@ def getDistance(o_lat, o_lng, d_lat, d_lng):
 
 #getDistance(40.60476,-73.95188,41.43206,-81.38992)
 
-print getNearbyPosts(40.60476,-73.95188)
+#print getNearbyPosts(40.60476,-73.95188)
 
 ##########Comments
