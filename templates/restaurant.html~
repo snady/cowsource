@@ -64,7 +64,7 @@
         <p>{{restaurant['address'][1]}} {{restaurant['address'][2]}} {{restaurant['address'][3]}} </p><br>
       </div>
       <div class="pure-u-1-4" align="center">
-        <a href="http://yelp.com/biz/{{restaurant['_id']}}"><p>Yelp</p></a>
+        <a href="http://yelp.com/biz/{{restaurant['yelpid']}}"><p>Yelp</p></a>
         <p>{{restaurant['phone'][0:3]}}-{{restaurant['phone'][3:6]}}-{{restaurant['phone'][6:]}} </p><br>
       </div>
       <div class="pure-u-1-4"></div>

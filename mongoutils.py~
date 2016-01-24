@@ -49,7 +49,10 @@ Returns:
 '''
 def getUserId(username):
     result = usersc.find_one({'name':username},{'_id':1})
-    return result['_id']
+    if '_id' in result:
+    	return result['_id']
+    else:
+	return {'error':'User Not Found'}
 
 '''
 Gets the username that corresponds to a user id
@@ -62,10 +65,7 @@ Returns:
 '''
 def getUserName(uid):
     result = usersc.find_one({'_id':uid},{'name':1})
-    if result != None:
-        return result
-    else:
-	return {'error':'User Not Found'}
+    return result
 
 '''
 Gets all users that are registered in the database
