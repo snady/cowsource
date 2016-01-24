@@ -388,12 +388,22 @@ Returns:
 def getDistance(o_lat, o_lng, d_lat, d_lng):
     url = 'https://maps.googleapis.com/maps/api/distancematrix/json?origins=%s,%s&destinations=%s,%s' % (o_lat, o_lng, d_lat, d_lng)
     result = simplejson.load(urllib2.urlopen(url))
-    print result['rows'][0]
+    #print result['rows'][0]
     return result['rows'][0]['elements'][0]['distance']['value']
+
+def getCityState(o_lat, o_lng):
+    url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=%s,%s' % (o_lat, o_lng)
+    result = simplejson.load(urllib2.urlopen(url))
+    addr = result['results'][len(result)-6]['formatted_address']
+    addr = addr[:addr.rfind(",")]
+    return addr[:addr.rfind(" ")]
+    #this format works for most u.s addresses
 
 #getDistance(40.60476,-73.95188,41.43206,-81.38992)
 
 #print getNearbyPosts(40.60476,-73.95188)
+
+#print getCityState(42.376765, -71.116724)
 
 ##########Comments
 
