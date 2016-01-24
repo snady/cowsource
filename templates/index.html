@@ -39,12 +39,17 @@
     var latitude  = position.coords.latitude;
     var longitude = position.coords.longitude;
 
-    console.log('Latitude is ' + latitude + ' <br>Longitude is ' + longitude);
+    console.log('Latitude is ' + latitude + '\nLongitude is ' + longitude);
     
     json = JSON.stringify({latitude: latitude, longitude: longitude})
-    var form = document.forms['form'];
-    form.location.value = json;
-
+    var forms = document.forms;
+    console.log(forms.length);
+    var i;
+    for (i=0;i< 2;i++){
+		console.log(forms[i]);
+		console.log(forms[i].location.value);
+	forms[i].location.value = json;
+    }
     /*ajax send to python
     $.ajax({
         type: 'POST',
@@ -129,7 +134,7 @@ geoLocate()
 
 	</div>
 	<div class="pure-u-1-2">
-		<form class="pure-form pure-form-aligned" method = "POST">
+		<form id="form" class="pure-form pure-form-aligned" method = "POST">
     	<fieldset>
     	<div class="pure-control-group">
     		<label for="register"><h2>Register</h2></label>
