@@ -19,6 +19,9 @@ def login():
                 error = ""
                 message = ""
                 print request.form
+                if request.form.has_key('location'):
+                    session['lati'] = json.loads(request.form['location'])['latitude']
+                    session['longi'] = json.loads(request.form['location'])['longitude']
                 if request.form.has_key('login'):
                         user = str(request.form['user'])
                         password = str(request.form['pass'])
@@ -151,9 +154,15 @@ def logout():
         del session['user']
         return redirect("/login")
 
-@app.route("/home")
+@app.route("/home", methods = ['GET','POST'])
 def home():
-        return render_template("home.html")
+    jason = []
+    lati = session['lati']
+    longi = session['longi']
+    jason = mongoutils.getNearbyPosts(lati,longi)
+    return render_template("home.html",json=jason)
+ 
+    
 
 @app.route("/autocomplete")
 def autocomplete():
@@ -178,9 +187,10 @@ def sriracha():
 @app.route("/nearby")
 def nearby():
 	return render_template("homhom.html")
-
+'''
 @app.route("/location", methods = ['GET','POST'])
 def location():
+    print "Request: ",request.json
     lati = request.json['latitude']
     longi = request.json['longitude']
     print lati,longi
@@ -188,6 +198,7 @@ def location():
     jason = json.dumps(mongoutils.getNearbyPosts(lati,longi))
     print jason
     return jason
+'''
 
 @app.route("/about")
 def about():
