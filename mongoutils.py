@@ -110,8 +110,6 @@ def addUser(username,password,email):
         return True
     return False
                 
-#addUser('hellopyk','my','friend')
-
 '''
 --------------------------------Posts------------------------------------------
 '''
@@ -160,7 +158,15 @@ def getUserPosts(idu):
         p['restaurant']=getRestaurantName(p['yelpid'])
     return posts
 
+'''
+Gets the distance between two points
 
+Args:
+    
+    
+Returns:
+    
+'''
 def likePost(idu,idp):
     p = postsc.find_one({'_id':idp})
     if not liked(idu,idp):
@@ -170,24 +176,20 @@ def likePost(idu,idp):
     postsc.update_one({'_id':idp},{'$set':{'likes':p['likes']}})
     return p['likes']
 
+'''
+Gets the distance between two points
+
+Args:
+    
+    
+Returns:
+    
+'''
 def liked(idu,idp):
     p = postsc.find_one({'_id':idp})
     print p
     return (idu in p['likes'])
 
-
-'''
-Adds a restaurant to the database using information from the Yelp API
-
-Args:
-    yelpid: string id used by Yelp to identify a restaurant
-    
-Returns:
-    none
-'''
-def addRestaurant(yelpid):
-    i = authy.get_business(yelpid)
-    restsc.insert({'_id':i['id'], 'name':i['name'], 'phone':i['phone'], 'address':[i['location']['address'][0],i['location']['city'],i['location']['state_code'],i['location']['postal_code'],i['location']['coordinate']], 'rating':i['rating']})
 
 '''
 Adds a post to the database, adds the restaurant with addRestaurant()
@@ -223,9 +225,18 @@ def writePost(path, tags, name, price, description, idu, idy):
         print "need restaurant"
     return idp
 
+'''
+Gets the distance between two points
 
+Args:
+    
+    
+Returns:
+    
+'''
 def removePost(idp):
     postsc.remove({'_id':idp})
+
 '''
 Looks through posts to find matching tags, names, or location
 
@@ -235,7 +246,6 @@ Args:
 Returns:
     array of post dictionaries that match query 
 '''
-
 def search(query):
     query = query.strip()
     result = {}
@@ -249,13 +259,7 @@ def search(query):
                 post['score'] += rest['score']
     return sorted(list(q), key = lambda k: k['score'], reverse=True)
 
-def getRestaurantName(yelpid):
-    try:
-        yelpname=getRestaurant(yelpid)['name']
-    except:
-        yelpname=''
-    return yelpname
-                                                                                                           
+
 '''
 Gets the posts matching the yelpid
 
@@ -286,24 +290,45 @@ def getNearbyPosts(lat,lng):
         result.extend(getRestaurantPosts(r['_id']))
     return result
 
-#print getAllPosts()
-#print getRestaurantPosts("dunkin-donuts-boston-24")
-#writePost("/path/",["hello","i","am","a","tag"],"nameoffood",3.14,"this is a nice pie", 2, "starbucks-brooklyn-39")
-#writePost("/path2/",["hello","i","am","another","tag"],"bestdrinkeva",6.28,"this is a nice frappuccino", 3, "starbucks-brooklyn-39")
-#writePost("/path3/",["hello","i","am","another","tag"],"coffeeman",3.28,"this is best coffee i rate 5/7", 3, "dunkin-donuts-boston-24")
-#writePost("/path4/",["hello","i","am","so many","tags"],"coffeewoman",3.28,"this is best coffee i rate 7/5", 3, "dunkin-donuts-boston-24")
-
 '''
 --------------------------------Comments---------------------------------------
+'''
+
+'''
+Gets the distance between two points
+
+Args:
+    
+    
+Returns:
+    
 '''
 def addComment(idu,idp,content,time):
     idc = len(list(commsc.find()))+1
     commsc.insert({'_id':idc,'uid':idu,'pid':idp,'content':content,
                     'time': time  })
+   
+'''
+Gets the distance between two points
+
+Args:
     
+    
+Returns:
+    
+''' 
 def removeComment(idc):
     commsc.remove({'_id':idc})
 
+'''
+Gets the distance between two points
+
+Args:
+    
+    
+Returns:
+    
+'''
 def getComments(idp):
     commy = list(commsc.find({'pid':idp}))
     for c in commy:
@@ -314,6 +339,21 @@ def getComments(idp):
 '''
 --------------------------------Restaurants------------------------------------
 '''
+
+'''
+Adds a restaurant to the database using information from the Yelp API
+
+Args:
+    yelpid: string id used by Yelp to identify a restaurant
+    
+Returns:
+    none
+'''
+def addRestaurant(yelpid):
+    i = authy.get_business(yelpid)
+    restsc.insert({'_id':i['id'], 'name':i['name'], 'phone':i['phone'], 'address':[i['location']['address'][0],i['location']['city'],i['location']['state_code'],i['location']['postal_code'],i['location']['coordinate']], 'rating':i['rating']})
+
+
 
 '''
 Gets the restaurant matching the yelpid
@@ -328,6 +368,15 @@ Returns:
 def getRestaurant(yelpid):
     return restsc.find_one({'_id':yelpid})
 
+'''
+Gets the distance between two points
+
+Args:
+    
+    
+Returns:
+    
+'''
 def getRestaurantName(yelpid):
     if restsc.find_one({'_id':yelpid}) == None:
         return yelpid
@@ -344,20 +393,6 @@ Returns:
 '''
 def getAllRestaurants():
     return list(restsc.find())
-
-'''
-def searchRestaurant(query):
-    queries = query.lower().split(' ')
-    rests = getAllRestaurants()
-    results = {}
-    for rest in rests:
-        words = rest['name'].lower()
-        for q in queries:
-            if words.find(q) != -1:
-                if rest['_id'] not in results:
-                    results[rest['_id']] += 1
-    return sorted(results, key=results.get, reverse=True)
-'''
 
 '''
 Gets restaurants that are nearby
@@ -382,6 +417,21 @@ def getNearbyRestaurants(lat,lng):
     return srests
 
 '''
+Gets the distance between two points
+
+Args:
+    
+    
+Returns:
+    
+'''
+def getRestaurantName(yelpid):
+    try:
+        yelpname=getRestaurant(yelpid)['name']
+    except:
+        yelpname=''
+    return yelpname                                                                                                           
+'''
 --------------------------------Miscellaneous----------------------------------
 '''
 
@@ -400,6 +450,15 @@ def getDistance(o_lat, o_lng, d_lat, d_lng):
     #print result['rows'][0]
     return result['rows'][0]['elements'][0]['distance']['value']
 
+'''
+Gets the distance between two points
+
+Args:
+    
+    
+Returns:
+    
+'''
 def getCityState(o_lat, o_lng):
     url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=%s,%s' % (o_lat, o_lng)
     result = simplejson.load(urllib2.urlopen(url))
@@ -407,6 +466,11 @@ def getCityState(o_lat, o_lng):
     addr = addr[:addr.rfind(",")]
     return addr[:addr.rfind(" ")]
     #this format works for most u.s addresses
+
+
+
+
+
 
 #getDistance(40.60476,-73.95188,41.43206,-81.38992)
 
@@ -418,6 +482,15 @@ def getCityState(o_lat, o_lng):
 
 ##########Comments
 
+#addUser('hellopyk','my','friend')
+
 
 
 #print search('pizza ave')
+#print getAllPosts()
+#print getRestaurantPosts("dunkin-donuts-boston-24")
+#writePost("/path/",["hello","i","am","a","tag"],"nameoffood",3.14,"this is a nice pie", 2, "starbucks-brooklyn-39")
+#writePost("/path2/",["hello","i","am","another","tag"],"bestdrinkeva",6.28,"this is a nice frappuccino", 3, "starbucks-brooklyn-39")
+#writePost("/path3/",["hello","i","am","another","tag"],"coffeeman",3.28,"this is best coffee i rate 5/7", 3, "dunkin-donuts-boston-24")
+#writePost("/path4/",["hello","i","am","so many","tags"],"coffeewoman",3.28,"this is best coffee i rate 7/5", 3, "dunkin-donuts-boston-24")
+
