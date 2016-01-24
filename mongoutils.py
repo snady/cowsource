@@ -222,6 +222,9 @@ def writePost(path, tags, name, price, description, idu, idy):
         addRestaurant(idy)
         print "need restaurant"
 
+
+def removePost(idp):
+    postsc.remove({'_id':idp})
 '''
 Looks through posts to find matching tags, names, or location
 

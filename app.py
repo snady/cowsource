@@ -20,7 +20,7 @@ def login():
                 error = ""
                 message = ""
                 print request.form
-                if request.form.has_key('location'):
+                if request.form['location'] != '':
                     session['lati'] = json.loads(request.form['location'])['latitude']
                     session['longi'] = json.loads(request.form['location'])['longitude']
                 if request.form.has_key('login'):
@@ -78,7 +78,10 @@ def makepost():
                 name = request.form['name']
                 desc = request.form['description']
                 img = request.form['path']
-                rest = request.form['restid']
+                if request.form['restid'] != '':
+                        rest = request.form['restid']
+                else:
+                        rest = request.form['rest']
                 price = request.form['price']
                 tags = request.form['tags']
                 user = session['user']
@@ -95,8 +98,15 @@ def showpost(idp):
         if 'user' not in session:
                 return redirect("/login")
         if request.method == 'POST':
-                content = request.form['texty']
-                mongoutils.addComment(mongoutils.getUserId(session['user']),idp,content,datetime.now())
+                if 'remove' in request.form:
+                        mongoutils.removePost(idp)
+                        return redirect(url_for('showposts'))
+                elif 'removec' in request.form:
+                        print request.form['removec']
+                        mongoutils.removeComment(int(request.form['removec']))
+                else:
+                        content = request.form['texty']
+                        mongoutils.addComment(mongoutils.getUserId(session['user']),idp,content,datetime.now())
         posty = mongoutils.getPost(idp)
         posty['uname'] = mongoutils.getUserName(posty['uid'])
         commy = mongoutils.getComments(idp)
@@ -151,6 +161,8 @@ def home():
     location = mongoutils.getCityState(lati,longi)
     for post in jason:
         post['restaurant'] = mongoutils.getRestaurant(post['yelpid'])
+
+    print jason
     return render_template("home.html",json=jason,location=location)
  
     
@@ -181,7 +193,7 @@ def nearby():
 
 @app.route("/about")
 def about():
-        pass
+        return render_template("about.html")
 
 if __name__ == "__main__":
         app.secret_key = "hello"
