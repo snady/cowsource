@@ -130,11 +130,13 @@ def logout():
 
 @app.route("/home", methods = ['GET','POST'])
 def home():
-    jason = []
     lati = session['lati']
     longi = session['longi']
     jason = mongoutils.getNearbyPosts(lati,longi)
-    return render_template("home.html",json=jason)
+    location = mongoutils.getCityState(lati,longi)
+    for post in jason:
+        post['restaurant'] = mongoutils.getRestaurant(post['yelpid'])
+    return render_template("home.html",json=jason,location=location)
  
     
 
@@ -161,18 +163,6 @@ def sriracha():
 @app.route("/nearby")
 def nearby():
 	return render_template("homhom.html")
-'''
-@app.route("/location", methods = ['GET','POST'])
-def location():
-    print "Request: ",request.json
-    lati = request.json['latitude']
-    longi = request.json['longitude']
-    print lati,longi
-	#mongoutils.getNearbyPosts(lati,longi)
-    jason = json.dumps(mongoutils.getNearbyPosts(lati,longi))
-    print jason
-    return jason
-'''
 
 @app.route("/about")
 def about():
