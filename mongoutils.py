@@ -468,6 +468,8 @@ Returns:
 '''
 def addRestaurant(yelpid):
     i = authy.get_business(yelpid)
+    if 'phone' not in i:
+        i['phone'] = ''
     restsc.insert({'_id':i['id'], 'name':i['name'], 'phone':i['phone'], 'address':[i['location']['address'][0],i['location']['city'],i['location']['state_code'],i['location']['postal_code'],i['location']['coordinate']], 'rating':i['rating']})
 
 '''
