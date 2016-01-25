@@ -52,11 +52,13 @@ Home
 			var infowindow = new google.maps.InfoWindow({
 				content: contentString
 			});
-
+			
+			var im = '../static/images/cow-128.png'
 			var marker = new google.maps.Marker({
 				position: rcoords,
 				map: mp,
-				title: 'Restaurant'
+				title: 'Restaurant',
+				icon: im
 			});
 
 			marker.addListener('click', function() {
