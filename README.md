@@ -1,5 +1,7 @@
 # cowsource
 ![alt tag](https://images.unsplash.com/photo-1446126102442-f6b2b73257fd?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&s=fdc200e9e5d9d25c2029b39701f15e2a)
+http://not.deadcows.org
+
 Mooooooo
 
 Software Development Term 1 Final Project
@@ -12,6 +14,13 @@ Newcomers need to sign up to access the website. Once signed, the user can view 
 
 ## APIs
 This website makes use of several APIs. Yelp API is used for identifying each restaurant. To provide posts taken nearby the user's location, Google Maps and Geolocation APIs are used to display and calculate the distances.
+
+## Database
+We utilize MongoDB in order to store all the necessary data. There are collections of posts, users, restaurants, and comments.
+Each item in the collection is differentiated by its id; we combine the benefits of relational and non-relational database through a more relational use of noSQL database.
+
+## Implementation
+Python/Flask was used for the web application itself, and the webpage routes. On the frontend, Javascript was used to interact with Google APIs and more. Gunicorn was used to implement the web server, and Ngnix was utilized to deal with domain implementation.
 
 ## Collaborators
 |   **Member**         |            **Role**            |
