@@ -131,7 +131,7 @@ def showposts(limi=30):
                 posts = mongoutils.search(request.args['query'])
                 display_msg = "Search for %s" % (request.args['query'])
         else:
-                posts = mongoutils.getAllPosts()
+                posts = mongoutils.getAllPosts()[::-1]
                 display_msg = "Browse"
         for post in posts:
             post['restaurant'] = mongoutils.getRestaurantName(post['yelpid'])
@@ -150,7 +150,7 @@ def restaurant(yelpid):
         return render_template("restaurant.html",error="Restaurant does not exist",restaurant=restaurant)
     else:
         restaurant = mongoutils.getRestaurant(yelpid)
-        rposts = mongoutils.getRestaurantPosts(yelpid)
+        rposts = mongoutils.getRestaurantPosts(yelpid)[::-1]
         print rposts
         return render_template("restaurant.html",error="", restaurant=restaurant,rposts=rposts)
 
@@ -161,7 +161,7 @@ def user(idu):
                 return redirect("/login")
 	if 'search' in request.args:
 		return redirect(url_for("showposts", query = request.args['query'], search = request.args['search']))
-        userposts = mongoutils.getUserPosts(idu)
+        userposts = mongoutils.getUserPosts(idu)[::-1]
         username = mongoutils.getUserName(idu)
         return render_template("user.html",posts=userposts,username=username)
         
