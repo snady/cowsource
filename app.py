@@ -177,6 +177,8 @@ def logout():
 
 @app.route("/home", methods = ['GET','POST'])
 def home():
+    if 'user' not in session:
+                return redirect ("/login")
     if 'lati' not in session or 'longi' not in session:
             return render_template("home.html", user={'lat':0,'lng':0},json=[],rests=[],location='')
     if 'search' in request.args:
@@ -195,6 +197,8 @@ def home():
 
 @app.route("/autocomplete")
 def autocomplete():
+        if 'term' not in request.args:
+                return 'illegal access'
 	name = request.args.get('term')
     	location = mongoutils.getCityState(session['lati'],session['longi'])
         location = location.replace(',','')
