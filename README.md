@@ -40,3 +40,6 @@ Python/Flask was used for the web application itself, and the webpage routes. Mo
 |Sandy Fang            | [`@snady`](https://github.com/snady)  |Frontend                    |
 |Katherine Gershfeld   | [`@kagers`](https://github.com/kagers)|Backend, Google             |
 
+## Demo
+See a demonstration of our project here: https://youtu.be/NnOi3vP56dY
+
