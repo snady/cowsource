@@ -140,7 +140,7 @@ def showposts(limi=30):
                 display_msg = "Browse"
         for post in posts:
             post['restaurant'] = mongoutils.getRestaurantName(post['yelpid'])
-        #print posts
+        
         return render_template("posts.html",posts=posts,display_msg=display_msg)
 
 @app.route("/restaurant/<yelpid>", methods = ['GET'])
