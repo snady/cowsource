@@ -101,8 +101,8 @@ def addUser(username,password,email):
         if len(us)==0:
             idu = 1
         else:
-            n = postsc.find_one(sort=[('_id',-1)])
-            idu = n+1    
+            n = usersc.find_one(sort=[('_id',-1)])
+            idu = int(n['_id'])+1    
         password = encrypt(password)
         r = {'_id':idu, 'name':username, 'password':password, 'email':email}
         usersc.insert(r)
@@ -339,8 +339,8 @@ Returns:
     none
 '''
 def addComment(idu,idp,content,time):
-    n = postsc.find_one(sort=[('_id',-1)])
-    idc = n+1
+    n = commsc.find_one(sort=[('_id',-1)])
+    idc = int(n['_id'])+1
     commsc.insert({'_id':idc,'uid':idu,'pid':idp,'content':content,
                     'time': time  })
    
