@@ -1,16 +1,10 @@
 <!doctype html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Write Post</title>
-
-    <link href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css" rel="stylesheet" >
-    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/grids-responsive-min.css">
-    <link href="/static/pure.css" rel="stylesheet" >
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <style>
+{% extends "base.html" %}
+{%block title%}
+User Page
+{%endblock%}
+{%block style%}
+<style>
       .l-box {
         padding: 0.5em;
       }
@@ -26,24 +20,8 @@
       padding: 50px;
       }
     </style>
-</head>
-
-<body>
-    <div class="home-menu pure-menu pure-menu-horizontal">
-        <a href="{{url_for('showposts')}}" class="pure-menu-heading">cowsource</a>
-        <ul class="pure-menu-list">
-            <li class="pure-menu-item"><a href="{{url_for('home')}}" class="pure-menu-link">Home</a></li>
-            <li class="pure-menu-item"><a href="{{url_for('about')}}" class="pure-menu-link">About</a></li>
-            <li class="pure-menu-item"><a href="{{url_for('makepost')}}" class="pure-menu-link">Make Post</a></li>
-            <li class="pure-menu-item"><a href="{{url_for('showposts')}}" class="pure-menu-link">Find New</a></li>
-	    <form class="pure-form pure-menu-item">
-              <fieldset>
-                <input type="text" name="query" placeholder="Search by name or tags">
-                <button name="search" type="submit" class="pure-button pure-button-primary">Search</button>
-              </fieldset>
-            </form>
-        </ul>
-    </div>
+{%endblock%}
+{%block body%}
 	<h1>{{username['error']}}</h1>
 	{% if 'error' not in username %}
     <div class="pure-g">
@@ -105,5 +83,4 @@
       }
     </script>
     {% endif %}
-</body>
-</html>
+{%endblock%}
