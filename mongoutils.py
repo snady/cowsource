@@ -415,8 +415,8 @@ Args:
 Returns:
     [latitude,longitude]
 '''
-def getRestaurantName(yelpid):
-    return restsc.find_one({'_id':yelpid})['address'].values()
+def getRestaurantCoords(yelpid):
+    return restsc.find_one({'_id':yelpid})['address'][-1].values()
 
 '''
 Gets all restaurants in the database

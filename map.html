@@ -16,8 +16,8 @@
 	<div id = "map"></div>
 	<script>
 		function initMap() {
-			var restaurants = {{rests}}
-			var user = JSON.parse({{user}})
+			var restaurants = {{rests|tojson|safe}}
+			var user = JSON.parse({{user|tojson|safe}})
 			var map = new google.maps.Map(document.getElementById('map'), {
 				zoom: 9,
 				center: user

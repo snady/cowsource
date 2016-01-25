@@ -1,8 +1,6 @@
 from flask import Flask, render_template, session, request
 from flask import redirect, url_for
 from datetime import datetime
-'''from pymongo import MongoClient
-import utils'''
 import mongoutils
 import json
 import authy
@@ -182,9 +180,11 @@ def home():
     longi = session['longi']
     jason = mongoutils.getNearbyPosts(lati,longi)
     location = mongoutils.getCityState(lati,longi)
+    user = json.dumps({'lat':lati,'lng':longi})
     for post in jason:
         post['restaurant'] = mongoutils.getRestaurantName(post['yelpid'])
-    return render_template("home.html",json=jason,location=location)
+	post['coords'] = mongoutils.getRestaurantCoords(post['yelpid'])
+    return render_template("home.html",user=user,json=jason,rests=jason,location=location)
  
     
 
