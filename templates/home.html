@@ -24,7 +24,7 @@ Home
     		</div>
     	</div>
 	<br>
-	<div id="map" style="height:500px; width:75%;" align="center"></div>
+	<div id="map" style="height:500px;width:75%;position:relative;right:50%;"></div>
 	<script>
 		function initMap() {
 			var restaurants = {{rests|tojson|safe}}
@@ -66,6 +66,7 @@ Home
 	</script>
 	<script src="https://maps.googleapis.com/maps/api/js?signed_in=true&callback=initMap"></script>
 
+	<br><br>
 	{% if json|length == 0 %}
 	<div class="pure-g">
 		<div class="pure-u-1-2" align="center">
