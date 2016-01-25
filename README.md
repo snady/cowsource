@@ -12,11 +12,11 @@ Software Development Term 1 Final Project
 Cowsource is a food-based webapp that combines the utility of Yelp with the convenience of Tinder. Upload photos of food, preferably containing beef and/or cow-related products, and browse uploaded pictures. Most importantly, discover all the food near you that you've been missing all these years.
 
 ## Running the project
-Make sure Mongodb works on your system
+Make sure Mongodb works on your system<br>
 Git clone the repo
-(in a pythonvirtual environment or not): `pip install -r requirements`
+(in a python virtual environment or not):<br> `pip install -r requirements`
 <br>`python app.py`
-
+<br>And go to localhost:8000/<br>
 Or, just use the website specified above.
 
 ## Features
@@ -41,5 +41,7 @@ Python/Flask was used for the web application itself, and the webpage routes. Mo
 |Katherine Gershfeld   | [`@kagers`](https://github.com/kagers)|Backend, Google             |
 
 ## Demo
-See a demonstration of our project here: https://youtu.be/hj8X2BAdIAk
+See a demonstration of our project here:<br> 
+Better version: https://youtu.be/Zu7EkY_cZbY <br>
+Slightly less good version: https://youtu.be/hj8X2BAdIAk
 
