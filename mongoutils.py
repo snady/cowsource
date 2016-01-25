@@ -204,7 +204,8 @@ def writePost(path, tags, name, price, description, idu, idy):
     if len(ps)==0:
         idp = 1
     else:
-        idp = ps[-1]['_id']+1
+        n = postsc.find_one(sort=[('_id',-1)])
+        idp = int(n['_id'])+1
     tags = tags.split(',')
     tags2 = []
     for tag in tags:

@@ -77,6 +77,7 @@ def makepost():
 	if 'search' in request.args:
 		return redirect(url_for("showposts", query = request.args['query'], search = request.args['search']))
         if request.method == 'POST':
+                
                 print request.form
                 name = request.form['name']
                 desc = request.form['description']
@@ -90,6 +91,10 @@ def makepost():
                 user = session['user']
                 idu = mongoutils.getUserId(user)
                 idp = mongoutils.writePost(img,tags,name,price,desc,idu,rest)
+                
+                print request.form
+                print idu
+                print idp
                 return redirect(url_for('showpost',idp=idp))
         else:
                 return render_template("writepost.html")
@@ -115,8 +120,8 @@ def showpost(idp):
 		return render_template("post.html",posty=posty)
         posty['uname'] = mongoutils.getUserName(posty['uid'])
         commy = mongoutils.getComments(idp)
-        print posty
-        return render_template("post.html",posty=posty,commy=commy)
+        uid = mongoutils.getUserId(session['user'])
+        return render_template("post.html",posty=posty,commy=commy,uid=uid)
 
 
 #shows newest limi number of posts
@@ -221,4 +226,4 @@ if __name__ == '__main__':
         app.run(host='0.0.0.0', port=8000)
 else:
         app.secret_key = "hello"
-
+        app.debug = True

@@ -118,7 +118,7 @@ View Post
 	  $SCRIPT_ROOT = {{request.script_root|tojson|safe}};
 	  
 	  function like(){
-	  $.getJSON($SCRIPT_ROOT + "/like", {idu: {{posty['uid']}}, idp: {{posty['_id']}} },
+	  $.getJSON($SCRIPT_ROOT + "/like", {idu: {{uid}}, idp: {{posty['_id']}} },
 	  function(likes)
 	  {$("#likes").text(likes.likes + ' likes');
     console.log(likes);
@@ -137,7 +137,7 @@ View Post
     }else{
 	  var i;
 	  for(i = 0;i < people.people.length; i++){
-			$("#plist").append("<a href="+$SCRIPT_ROOT+"/user/"+people.people[i][0]+">"+people.people[i][1]+"</a>");
+			$("#plist").append("<a href="+$SCRIPT_ROOT+"/user/"+people.people[i][0]+">"+people.people[i][1]+"</a><br>");
 			console.log(people.people[i])
 		}
     }
