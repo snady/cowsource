@@ -14,15 +14,60 @@ Home
 	.padded {
 	padding: 50px;
 	}
+	#map {
+		height: 50%;
+	}
 </style>
 {% endblock %}
 
 {% block body %}
     <div class="pure-g">
     	<div class="pure-u-1-3" align="center">
-    		<h1>Near you in {{location}}</h1>
+    		<h1>Hot beef near {{location}}</h1>
     	</div>
     </div>
+
+	<div id="map"></div>
+	<script>
+		function initMap() {
+			var restaurants = {{rests}}
+			var user = JSON.parse({{user}})
+			var map = new google.maps.Map(document.getElementById('map'), {
+				zoom: 9,
+				center: user
+			});
+			var mark = new google.maps.Marker({
+				position: user,
+				map: map,
+				title: 'User'
+			});
+			for (var i=0; i<restaurants.length; i++) {
+				markRest(restaurants[i],map);
+			}
+		}
+		function markRest(jason,mp) {
+			var contentString = '<div style="width:150px;height:150px;overflow:hidden;margin:10px;position:relative;">'+
+			'<img height=200px width=200px style="position:absolute; left: -1000%; right: -1000%; top: -1000%; bottom: -1000%; margin:auto; min-height: 100%; min-width: 100%;"'+
+			'src="'+jason['file']+'"></div><b>'+jason['restaurant']+'<b>';
+			
+			var rcoord = jason['coords'];
+			var rcoords = {lat: rcoord[0],lng: rcoord[1]};		
+			var infowindow = new google.maps.InfoWindow({
+				content: contentString
+			});
+
+			var marker = new google.maps.Marker({
+				position: rcoords,
+				map: mp,
+				title: 'Restaurant'
+			});
+
+			marker.addListener('click', function() {
+				infowindow.open(mp, marker);
+			});
+		}
+	</script>
+	<script src="https://maps.googleapis.com/maps/api/js?signed_in=true&callback=initMap"></script>
 
 	{% if json|length == 0 %}
 	<div class="pure-g">

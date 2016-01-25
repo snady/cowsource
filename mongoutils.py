@@ -407,6 +407,18 @@ def getRestaurantName(yelpid):
     return restsc.find_one({'_id':yelpid})['name']
 
 '''
+Gets the coordinates of the restaurant matching the yelpid
+
+Args:
+    yelpid: the yelpid to look for
+    
+Returns:
+    [latitude,longitude]
+'''
+def getRestaurantName(yelpid):
+    return restsc.find_one({'_id':yelpid})['address'].values()
+
+'''
 Gets all restaurants in the database
 
 Args:
