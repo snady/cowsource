@@ -339,8 +339,11 @@ Returns:
     none
 '''
 def addComment(idu,idp,content,time):
-    n = commsc.find_one(sort=[('_id',-1)])
-    idc = int(n['_id'])+1
+    if len(commsc.find()) == 0:
+        idc = 1
+    else:
+        n = commsc.find_one(sort=[('_id',-1)])
+        idc = int(n['_id'])+1
     commsc.insert({'_id':idc,'uid':idu,'pid':idp,'content':content,
                     'time': time  })
    
