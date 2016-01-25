@@ -44,7 +44,7 @@ User Page
       </div>
     {% else %}
       <div class="l-content">
-      {% for row_no in range(posts|length % 4 + 1) %}
+      {% for row_no in range((posts|length / 4 + 1)|int) %}
         <div class="pricing-tables pure-g">
           {% for post_no in range(4) %}
             {% if (row_no * 4 + post_no) < posts|length %}
