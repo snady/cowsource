@@ -75,8 +75,10 @@ def request(host, path, url_params=None):
     signed_url = oauth_request.to_url()
 
     print u'Querying {0} ...'.format(url)
-
-    conn = urllib2.urlopen(signed_url, None)
+    try:
+        conn = urllib2.urlopen(signed_url, None)
+    except:
+        return {'error':'error'}
     print "url: "+signed_url
     try:
         response = json.loads(conn.read())
@@ -118,7 +120,7 @@ def get_business(business_id):
         dict: The JSON response from the request.
     """
     business_path = BUSINESS_PATH + business_id
-
+    
     return request(API_HOST, business_path)
 
 

@@ -152,7 +152,7 @@ def restaurant(yelpid):
     if 'search' in request.args:
 	return redirect(url_for("showposts", query = request.args['query'], search = request.args['search']))
     if mongoutils.getRestaurant(yelpid) == None:
-        return render_template("restaurant.html",error="Restaurant does not exist",restaurant=restaurant)
+        return render_template("restaurant.html",error="Restaurant does not exist or not registered on Yelp",restaurant=restaurant)
     else:
         restaurant = mongoutils.getRestaurant(yelpid)
         rposts = mongoutils.getRestaurantPosts(yelpid)[::-1]
