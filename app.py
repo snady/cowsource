@@ -178,7 +178,7 @@ def logout():
 @app.route("/home", methods = ['GET','POST'])
 def home():
     if 'lati' not in session or 'longi' not in session:
-            return render_template("home.html")
+            return render_template("home.html", user={'lat':0,'lng':0},json=[],rests=[],location='')
     if 'search' in request.args:
 	    return redirect(url_for("showposts", query = request.args['query'], search = request.args['search']))
     lati = session['lati']
