@@ -50,7 +50,7 @@ Restaurant
     </div>
 
     <div class="l-content">
-    {% for row_no in range((rposts|length / 4 + 1))|int %}
+    {% for row_no in range((rposts|length / 4 + 1)|int) %}
     <div class="pricing-tables pure-g" align="center">
     {% for post_no in range(4) %}
     {% if (row_no * 4 + post_no) < rposts|length %}

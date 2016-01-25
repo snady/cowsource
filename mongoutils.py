@@ -339,7 +339,7 @@ Returns:
     none
 '''
 def addComment(idu,idp,content,time):
-    if len(commsc.find()) == 0:
+    if len(list(commsc.find())) == 0:
         idc = 1
     else:
         n = commsc.find_one(sort=[('_id',-1)])
