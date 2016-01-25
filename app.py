@@ -206,14 +206,6 @@ def autocomplete():
 	#print request.args
 	return json.dumps(cleaned)
 
-@app.route("/sriracha")
-def sriracha():
-	return render_template("otto.html")
-
-@app.route("/nearby")
-def nearby():
-	return render_template("homhom.html")
-
 @app.route("/about")
 def about():
 	if 'user' not in session:
