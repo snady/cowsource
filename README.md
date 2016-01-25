@@ -1,5 +1,7 @@
 # cowsource
+####crowdsourcing cows
 ![alt tag](https://images.unsplash.com/photo-1446126102442-f6b2b73257fd?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&s=fdc200e9e5d9d25c2029b39701f15e2a)
+
 http://not.deadcows.org
 
 Mooooooo
@@ -7,13 +9,13 @@ Mooooooo
 Software Development Term 1 Final Project
 
 ## Description
-Cowsource is a food-based app that combines the utility of Yelp with the convenience of Tinder. Users can upload pictures of food they've had at restaurants and share them with their friends. Clicking the picture will bring up information about the food and restaurant/eatery it's from, allowing users to go and purchase it themselves if they so choose. Users will also be able to discover food near them based on location data. 
+Cowsource is a food-based webapp that combines the utility of Yelp with the convenience of Tinder. Upload photos of food, preferably containing beef and/or cow-related products, and browse uploaded pictures. Most importantly, discover all the food near you that you've been missing all these years.
 
 ## Running the project
 Make sure Mongodb works on your system
 Git clone the repo
-pip install -r requirements
-python app.py
+(in a pythonvirtual environment or not): `pip install -r requirements`
+`python app.py`
 
 Or, just use the website specified above.
 
